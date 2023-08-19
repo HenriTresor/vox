@@ -14,7 +14,7 @@ const navItems = [
 
 function NavBar({ }: Props) {
     return (
-        <div className='w-full h-auto p-3 flex justify-between items-center sticky top-0'>
+        <div className='w-full h-auto p-3 flex justify-between items-center sticky top-0 z-10 bg-white'>
             <div className='flex w-1/2 justify-evenly items-center'>
                 <Logo />
                 <nav className='items-center w-full justify-evenly hidden sm:flex'>
