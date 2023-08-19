@@ -1,6 +1,7 @@
 import { ToastContainer } from 'react-toastify'
 import './globals.css'
 import type { Metadata } from 'next'
+import NotifyContextProvider from '@/context/NotifyContext'
 
 export const metadata: Metadata = {
   title: 'Vox - Team management and collaboration system',
@@ -13,12 +14,12 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <>
-      <html lang="en">
-        <body>
+    <html lang="en">
+      <body>
+        <NotifyContextProvider>
           {children}
-        </body>
-      </html>
-    </>
+        </NotifyContextProvider>
+      </body>
+    </html>
   )
 }

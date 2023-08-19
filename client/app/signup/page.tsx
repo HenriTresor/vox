@@ -4,12 +4,13 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import React from 'react'
-import { toast, ToastContainer } from 'react-toastify'
+import { NotifyContext } from '@/context/NotifyContext'
 
 type Props = {}
 
 function Page({ }: Props) {
 
+    const {notify}  = React.useContext(NotifyContext)
     const [inputValues, setInputValues] = React.useState({
         email: '',
         firstName: '',
@@ -53,7 +54,7 @@ function Page({ }: Props) {
                             </div>
                         </div>
 
-                        <Button type='submit' >Create account</Button>
+                        <Button type='submit' onClick={()=>notify({message:'hello', type:'info'})}>Create account</Button>
                     </div>
                 </div>
 

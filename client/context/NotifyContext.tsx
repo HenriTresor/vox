@@ -1,3 +1,4 @@
+'use client'
 import Alert from '@/components/reusables/Alert'
 import React from 'react'
 
@@ -10,12 +11,12 @@ type defaultValues = {
 }
 
 type AlertTypes = {
-    type: 'error' | 'success' | 'info' | any,
+    type: 'error' | 'success' | 'info' ,
     message: string
 }
-export const NotifyContext = React.createContext<defaultValues>({
-    notify: () => void
-})
+
+
+export const NotifyContext = React.createContext<defaultValues>({ notify: () => { } })
 
 
 function NotifyContextProvider({ children }: Props) {
@@ -40,12 +41,14 @@ function NotifyContextProvider({ children }: Props) {
     return (
         <NotifyContext.Provider value={value}>
             {children}
-            <Alert
-                isAlertOpen={isAlertOpen}
-                setAlertOpen={setAlertOpen}
-                type={alert.type}
-                message={alert.message}
-            />
+            {isAlertOpen && (
+                <Alert
+                    isAlertOpen={isAlertOpen}
+                    setAlertOpen={setAlertOpen}
+                    type={alert.type}
+                    message={alert.message}
+                />
+           )}
         </NotifyContext.Provider>
     )
 }
