@@ -4,6 +4,7 @@ import dbConfig from './configs/db.config.js'
 import { config } from 'dotenv'
 import errorResponse from './utils/errorResponse.js'
 import sendEmail from './utils/emailTransporter.js'
+import cors from 'cors'
 
 import userRouter from './routes/user.route.js'
 
@@ -12,6 +13,7 @@ config()
 const app = express()
 
 app.use(express.json())
+app.use(cors())
 // app.use(express.urlencoded({ extended: false }))
 
 dbConfig(process.env.MONGO_URL || 'mongodb://127.0.0.1:27017/vox').then((conn) => {
@@ -27,9 +29,9 @@ dbConfig(process.env.MONGO_URL || 'mongodb://127.0.0.1:27017/vox').then((conn) =
 const root = '/api/v1/'
 
 app.use(`${root}users`, userRouter)
-
 app.all('*', (req, res, next) => {
     next(errorResponse(404, 'route not found'))
 })
+
 
 app.use(errorHandler)

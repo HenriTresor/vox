@@ -79,15 +79,15 @@ export const sendVerificationCode = async (req, res, next) => {
 }
 export const verifyAccount = async (req, res, next) => {
     try {
-        const { code, id } = req.body
-        if (!code || !id) return next(errorResponse(400, 'you must provide the verification code and the user id'))
+        const { code, email } = req.body
+        if (!code || !email) return next(errorResponse(400, 'you must provide the verification code and the user id'))
 
-        const user = await User.findById(id)
+        const user = await User.findOne({ email })
         if (!user) return next(errorResponse(404, 'user was not found'))
-        if(user.verifiedAccount) return next(errorResponse(400, 'account is already verified'))
+        if (user.verifiedAccount) return next(errorResponse(400, 'account is already verified'))
         if (user.verificationCode !== parseInt(code)) return next(errorResponse(400, 'code is not correct'))
 
-        await User.findByIdAndUpdate(id, { verifiedAccount: true, verificationCode: 0 })
+        await User.findOneAndUpdate({ email: user.email }, { verifiedAccount: true, verificationCode: 0 })
         res.status(200).json({
             status: true,
             message: 'account is verified'
