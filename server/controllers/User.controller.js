@@ -49,3 +49,49 @@ export const createUser = async (req, res, next) => {
     }
 }
 
+export const sendVerificationCode = async (req, res, next) => {
+    try {
+        let { email } = req.body
+        let user = await checkUserWithEmail({ email })
+        if (!user) return next(errorResponse(404, `user with email ${email} was not found`))
+        if (user.verifiedAccount) return next(errorResponse(400, `account with email ${email} is already verified`))
+
+        const code = generateVerificationCode()
+        await User.findOneAndUpdate({ email }, {
+            verificationCode: code
+        })
+
+        const emailResponse = await sendEmail(value.email, 'verify your account', `enter this code to verify your email ${code}`)
+        if (emailResponse) {
+            return res.status(200).json({
+                status: true, message: 'a code was sent to your email. Check it to verify your account'
+            })
+        }
+        res.status(500).json({
+            status: fale,
+            message: 'something went wrong'
+        })
+    } catch (error) {
+        console.log('[sending-code]:', error.message)
+        next(errorResponse(500, 'internal server error'))
+    }
+}
+export const verifyAccount = async (req, res, next) => {
+    try {
+        const { code, id } = req.body
+        if (!code || !id) return next(errorResponse(400, 'you must provide the verification code and the user id'))
+
+        const user = await User.findById(id)
+        if (!user) return next(errorResponse(404, 'user was not found'))
+        if (user.verificationCode !== parseInt(code)) return next(errorResponse(400, 'code is not correct'))
+
+        await User.findByIdAndUpdate(id, { verifiedAccount: true, verificationCode: 0 })
+        res.status(200).json({
+            status: true,
+            message: 'account is verified'
+        })
+    } catch (error) {
+        console.log('[verifying-account]:', error.message)
+        next(errorResponse(500, 'internal server error'))
+    }
+}
