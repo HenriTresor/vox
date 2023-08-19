@@ -3,7 +3,7 @@ import { config } from 'dotenv'
 
 config()
 
-const sendEmail = async (email, subject, text) => {
+const sendEmail = async (email, subject, text, html) => {
     try {
         const transporter = nodemailer.createTransport({
             host: process.env.EMAIL_HOST,
@@ -20,7 +20,8 @@ const sendEmail = async (email, subject, text) => {
             from: process.env.LOGIN,
             to: email,
             subject: subject,
-            text: text,
+            html: html ? html : null,
+            text: !html && text
         });
         return true
     } catch (error) {

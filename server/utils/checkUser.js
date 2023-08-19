@@ -1,13 +1,13 @@
 import User from "../models/User.model.js";
 
-export default async (identifier) => {
-    const user = await User.findOne({
-        $or: [
-            { email: identifier },
-            { _id: identifier }
-        ]
-    })
+export const checkUserWithId = async (id) => {
+    let user = await User.findById(id)
+    if (user?.email) return true
+    return false
+}
 
-    if (user) return true
+export const checkUserWithEmail = async (email) => {
+    let user = await User.findOne({ email })
+    if (user?._id) return true
     return false
 }

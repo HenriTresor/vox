@@ -2,14 +2,23 @@ import { hash } from "bcrypt";
 import { Schema, model } from "mongoose";
 
 const UserSchema = new Schema({
-    email: { type: String, required, unique },
-    firstName: { type: String, required },
-    lastName: { type: String, required },
+    email: { type: String, required: true, unique: true },
+    firstName: { type: String, required: true, trim: true },
+    lastName: { type: String, required: true, trim: true },
     workspaces: [{
         workspace: Schema.Types.ObjectId,
-        ref: 'workspaces'
+        // ref: 'workspaces'
     }],
-    password: { type: String, required, }
+    password: { type: String, required: true, },
+    verifiedAccount: {
+        type: Boolean,
+        default: false
+    },
+    verificationCode: {
+        type: Number,
+        required: true,
+        default: 0
+    }
 },
     {
         timestamps: true
