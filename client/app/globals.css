@@ -8,3 +8,10 @@
 html{
   font-family: Roboto, sans;
 }
+
+.input-container{
+  @apply p-4 mt-5 mb-5 w-full flex flex-col
+}
+.input-container input{
+  @apply p-4 w-full border-2 border-neutral-400 mt-3
+}

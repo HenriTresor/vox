@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import Logo from '@/components/reusables/logo'
 import { Menu } from 'lucide-react'
 import MenuBar from './Menu'
+import { useRouter } from 'next/navigation'
 
 type Props = {}
 
@@ -16,6 +17,7 @@ export const navItems = [
 ]
 
 function NavBar({ }: Props) {
+    const router = useRouter()
     const [isMenuOpen, setIsMenuOpen] = React.useState(false)
     return (
         <div className='w-full h-auto p-3 flex justify-between items-center sticky top-0 z-10 bg-white'>
@@ -30,14 +32,14 @@ function NavBar({ }: Props) {
                 </nav>
             </div>
             {isMenuOpen && <MenuBar setIsMenuOpen={setIsMenuOpen} />}
-            <Button variant={'ghost'} className='md:hidden block ' onClick={()=>setIsMenuOpen(true)}>
+            <Button variant={'ghost'} className='md:hidden block ' onClick={() => setIsMenuOpen(true)}>
                 <Menu />
             </Button>
             <div className='p-2 hidden gap-4 sm:flex'>
                 <Button variant='outline'>
                     login
                 </Button>
-                <Button variant='default'>
+                <Button variant='default' onClick={() => router.push('/signup')}>
                     join us
                 </Button>
             </div>
