@@ -9,7 +9,7 @@ type Props = {
 function NavItem({name, href }: Props) {
     return (
         <Link
-            className=''
+            className=' font-[500] capitalize hover:text-neutral-600 tracking-wider'
             href={href}>
             {name}
        </Link>
