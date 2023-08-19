@@ -1,3 +1,4 @@
+import { hash } from "bcrypt";
 import { Schema, model } from "mongoose";
 
 const UserSchema = new Schema({
@@ -15,5 +16,13 @@ const UserSchema = new Schema({
     }
 )
 
+UserSchema.pre('save', async function () {
+    try {
+        const hashedPwd = await hash(this.password, 10)
+        this.password = hashedPwd
+    } catch (error) {
+        console.log('[hash-error]', error.message)
+    }
+})
 export default model('users', UserSchema)
 
