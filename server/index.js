@@ -19,16 +19,8 @@ dbConfig(process.env.MONGO_URL || 'mongodb://127.0.0.1:27017/vox').then((conn) =
     })
 })
 
-
-app.get('/test-mail', async (req, res, next) => {
-    const response = await sendEmail('shimwamanahenritresor@gmail.com', 'testing email sending', 'if you get this email it is working!')
-    return res.json({
-        message: response
-    })
-})
 app.all('*', (req, res, next) => {
     next(errorResponse(404, 'route not found'))
 })
 
 app.use(errorHandler)
- 
