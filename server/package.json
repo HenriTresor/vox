@@ -10,7 +10,8 @@
     "joi": "^17.9.2",
     "jsonwebtoken": "^9.0.1",
     "lodash": "^4.17.21",
-    "mongoose": "^7.4.3"
+    "mongoose": "^7.4.3",
+    "nodemailer": "^6.9.4"
   },
   "devDependencies": {
     "dotenv": "^16.3.1"
