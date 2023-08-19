@@ -1,3 +1,4 @@
+import { Button } from '@/components/ui/button'
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import React from 'react'
 
@@ -29,7 +30,8 @@ const AboutUs = (props: Props) => {
             <div className='w-1/2 h-full bg-none border-r-4  border-black  text-black hidden md:flex text-center items-center justify-center text-[3rem] tracking-wider'>
                 <div className='w-full p-4'>
                     <h1>Why Choose Us</h1>
-                    <p className='text-[0.4em] text-neutral-700 mt-10 '>We are a team of dedicated developers,<br/> working to provide solutions!</p>
+                    <p className='text-[0.4em] text-neutral-700 mt-10 '>We are a team of dedicated developers,<br /> working to provide solutions!</p>
+                    <Button>Find more →</Button>
                </div>
             </div>
             <div className='w-full p-4 block  md:hidden text-[2rem] '>
