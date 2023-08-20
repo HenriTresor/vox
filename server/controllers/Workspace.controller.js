@@ -18,6 +18,11 @@ export const createWorkspace = async (req, res, next) => {
             name: value.name,
             category: value.category,
             inviteLink: generateInviteLink(value.name),
+            channels: [{
+                name: 'General',
+                members: [admin],
+                creator: admin,
+            }],
             admin: value.admin,
             members: [admin]
         })

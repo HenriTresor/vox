@@ -21,7 +21,8 @@ export type WorkspaceTypes = {
   createdAt: Date,
   updatedAt: Date,
   avatar: string,
-  _id: string
+  _id: string,
+  channels?: []
 }
 
 function Page({ }: Props) {
@@ -68,16 +69,16 @@ function Page({ }: Props) {
                 </>
               )
               : (
-              <>
-                {workspaces.map((workspace: WorkspaceTypes) => (
-                  <Workspace {...workspace} key={workspace._id} />
-                ))}
+                <>
+                  {workspaces.map((workspace: WorkspaceTypes) => (
+                    <Workspace {...workspace} key={workspace._id} />
+                  ))}
                   <Button onClick={() => router.push('/create-workspace')}>Create workspace</Button>
                 </>
-        )
+              )
           }
-      </div>
-    </div >
+        </div>
+      </div >
       <Footer />
     </>
   )
