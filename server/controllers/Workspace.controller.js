@@ -129,7 +129,8 @@ export const acceptInvite = async (req, res, next) => {
         if (workspace.members.includes(recipientId)) return next(errorResponse(409, 'user is already a member'))
         await Workspace.findOneAndUpdate({ slug }, {
             $push: {
-                members: recipientId
+                members: recipientId,
+                'channels[0].members': recipientId
             }
         })
         res.status(200).json({

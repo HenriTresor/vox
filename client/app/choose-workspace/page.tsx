@@ -72,7 +72,7 @@ function Page({ }: Props) {
               : (
                 <>
                   {workspaces.map((workspace: WorkspaceTypes) => (
-                    <Workspace {...workspace} key={workspace._id} />
+                    <Workspace {...workspace} key={workspace._id} action={ ()=>router.push(`/workspaces/${workspace.slug}`)} />
                   ))}
                   <Button onClick={() => router.push('/create-workspace')}>Create workspace</Button>
                 </>

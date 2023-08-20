@@ -20,6 +20,12 @@ const WorkspaceSchema = new Schema(
                         ref: 'user'
                     }
                 ],
+                form: {
+                    type: String,
+                    required: true,
+                    enum: ['private', 'public'],
+                    default: 'public'
+                },
                 creator: { type: Schema.Types.ObjectId, ref: 'users' },
                 messages: [
                     {

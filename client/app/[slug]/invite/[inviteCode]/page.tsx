@@ -82,7 +82,9 @@ function Page({ }: Props) {
           (workspace && isInviteCodeCorrect) ? (
             <>
               <h1 className='font-bold text-[2rem] mb-5'>You were invited to join the following workspace:</h1>
-              <Workspace {...workspace} />
+              <Workspace {...workspace} action={() => {
+                acceptInvite()
+              }} />
               <Button onClick={acceptInvite}>Accept</Button>
             </>
           ) : (

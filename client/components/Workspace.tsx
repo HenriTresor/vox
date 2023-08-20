@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 
 type Props = {}
 
-function Workspace({ name, avatar, members, _id, slug }: WorkspaceTypes) {
+function Workspace({ name, avatar, members, _id, slug, action }: WorkspaceTypes | any) {
     const router = useRouter()
     return (
 
@@ -21,7 +21,7 @@ function Workspace({ name, avatar, members, _id, slug }: WorkspaceTypes) {
                 </div>
             </div>
             <Button size={'icon'}
-                onClick={() => router.push(`/workspaces/${slug}`)}
+                onClick={action}
             >→</Button>
         </div>
     )
