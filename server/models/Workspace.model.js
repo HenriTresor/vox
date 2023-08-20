@@ -38,6 +38,10 @@ const WorkspaceSchema = new Schema(
                 ref: 'users'
             }
         ],
+        inviteCode: {
+            type: String,
+            required: true
+        }
     },
     {
         timestamps: true

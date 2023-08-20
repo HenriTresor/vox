@@ -6,7 +6,11 @@ import sendEmail from "../utils/emailTransporter.js";
 import { checkUserWithId } from "../utils/checkUser.js";
 
 const generateInviteLink = (name) => {
-    return String(`${process.env.FRONTEND_URL}/${name}/invite/${crypto.randomBytes(10).toString('hex')}`)
+    inviteCode = crypto.randomBytes(10).toString('hex')
+    return {
+        inviteLink: String(`${process.env.FRONTEND_URL}/${name}/invite/${inviteCode}`),
+        inviteCode
+    }
 }
 
 export const createWorkspace = async (req, res, next) => {
@@ -16,7 +20,7 @@ export const createWorkspace = async (req, res, next) => {
         if (error) return next(errorResponse(400, error.details[0].message))
         let creator = await checkUserWithId(admin)
         if (!creator) return next(errorResponse(404, 'creator was not found'))
-        const inviteLink = generateInviteLink(value.name)
+        const { inviteCode, inviteLink } = generateInviteLink(value.name)
         let newWorkspace = new Workspace({
             name: value.name,
             category: value.category,
@@ -27,7 +31,8 @@ export const createWorkspace = async (req, res, next) => {
                 creator: admin,
             }],
             admin: value.admin,
-            members: [admin]
+            members: [admin],
+            inviteCode
         })
 
         await newWorkspace.save()
