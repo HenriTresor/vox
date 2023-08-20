@@ -19,12 +19,18 @@ export type User = {
 }
 type ContextTypes = {
     authenticated: boolean,
-    user: User | null
+    user: User | null,
+    setAuthenticated: (val: boolean) => void,
+    setUser: any,
+    logout: () => void
 }
 
 const defaultValues = {
     authenticated: false,
-    user: null
+    user: null,
+    setAuthenticated: () => { },
+    setUser: () => { },
+    logout: () => { }
 }
 
 export const AuthContext = React.createContext<ContextTypes>(defaultValues)
@@ -34,7 +40,15 @@ function AuthContextProvider({ children }: Props) {
     const [user, setUser] = React.useState<User | null>(null)
     const { notify } = useContext(NotifyContext)
     const router = useRouter()
-   
+
+
+    const logout = () => {
+        setUser(null)
+        setAuthenticated(false)
+        localStorage.removeItem('email')
+        document.cookie = ''
+        router.push('/login')
+    }
     const getUser = React.useCallback(async () => {
         try {
             const res = await api.server.GET('/users/me')
@@ -50,7 +64,7 @@ function AuthContextProvider({ children }: Props) {
         localStorage.getItem('email') && getUser()
     }, [])
     const value = {
-        authenticated, setAuthenticated, user, setUser
+        authenticated, setAuthenticated, user, setUser, logout
     }
     return (
         <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

@@ -3,11 +3,13 @@ import React, { useContext } from 'react'
 import NavItem from './NavItem'
 import { Button } from '@/components/ui/button'
 import Logo from '@/components/reusables/logo'
-import { Menu } from 'lucide-react'
+import { Menu, LogOutIcon, PersonStandingIcon, PlusCircleIcon } from 'lucide-react'
 import MenuBar from './Menu'
 import { useRouter } from 'next/navigation'
 import { AuthContext } from '@/context/AuthContext'
 import Link from 'next/link'
+import { Menu as SmallMenu } from '@headlessui/react'
+
 
 type Props = {}
 
@@ -21,7 +23,8 @@ export const navItems = [
 function NavBar({ }: Props) {
     const router = useRouter()
     const [isMenuOpen, setIsMenuOpen] = React.useState(false)
-    const {authenticated, user} = useContext(AuthContext)
+    const { authenticated, user, setAuthenticated, setUser, logout } = useContext(AuthContext)
+
     return (
         <div className='w-full h-auto p-3 flex justify-between items-center sticky top-0 z-10 bg-white'>
 
@@ -52,11 +55,49 @@ function NavBar({ }: Props) {
                         </Button>
                     </div>
                 ) : (
-                        <Button variant='outline'>
+                    <SmallMenu className='relative' as={'div'}>
+                        <SmallMenu.Button className={'border-2 p-2 rounded-md '} >
                             profile
-                        </Button>
+                        </SmallMenu.Button>
+                        <SmallMenu.Items className={'absolute right-5 top-10 w-[40dvh] bg-white shadow-md border rounded-md p-1 flex flex-col'}>
+                            <SmallMenu className="p-2 text-center text-[1.5rem] font-bold capitalize tracking-wider" as={'div'}>
+                                {user?.firstName} {user?.lastName}
+                            </SmallMenu>
+                            <SmallMenu.Item >
+                                {({ active }) => (
+                                    <Link
+                                        className={`p-2 text-left capitalize ${active && 'bg-neutral-200'} flex items-center gap-3`}
+                                        href={'/choose-workspace'}>
+                                        <PersonStandingIcon />
+                                        my workspaces
+                                    </Link>
+                                )}
+                            </SmallMenu.Item>
+                            <SmallMenu.Item >
+                                {({ active }) => (
+                                    <Link
+                                        className={`p-2 text-left capitalize ${active && 'bg-neutral-200'} flex items-center gap-3`}
+                                        href={'/create-workspace'}>
+                                        <PlusCircleIcon />
+                                        create new workspace
+                                    </Link>
+                                )}
+                            </SmallMenu.Item>
+                            <SmallMenu.Item >
+                                {({ active }) => (
+                                    <Link href={'#'}
+                                        className={`p-2 text-left capitalize ${active && 'bg-red-500'} flex items-center gap-3`}
+                                        onClick={() => logout()}
+                                    >
+                                        <LogOutIcon />
+                                        Logout
+                                    </Link>
+                                )}
+                            </SmallMenu.Item>
+                        </SmallMenu.Items>
+                    </SmallMenu>
                 )
-          }
+            }
         </div>
     )
 }

@@ -3,11 +3,12 @@ import Logo from '@/components/reusables/logo'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import React, { useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { NotifyContext } from '@/context/NotifyContext'
 import api from '@/lib/api'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { AuthContext } from '@/context/AuthContext'
 
 type Props = {}
 
@@ -15,6 +16,7 @@ function Page({ }: Props) {
 
     const router = useRouter()
     const { notify } = React.useContext(NotifyContext)
+    const { setAuthenticated, setUser } = useContext(AuthContext)
     const [inputValues, setInputValues] = React.useState({
         email: '',
         firstName: '',
@@ -33,6 +35,8 @@ function Page({ }: Props) {
             const res = await api.server.POST('/users', inputValues)
             const data = await res.json()
             if (!data.status) return notify({ message: data.message, type: 'error' })
+            setAuthenticated(true)
+            setUser(data.user)
             localStorage.setItem('email', data.user.email)
             document.cookie = `access_token=${data.access_token}`
             notify({ message: data.message, type: 'info' })
@@ -81,7 +85,7 @@ function Page({ }: Props) {
 
                         <Button type='submit' onClick={handleSubmit} disabled={loading}>Create account</Button>
                         <p className='mt-5 text-[.9rem] flex gap-1'>
-                           Already have an account?
+                            Already have an account?
                             <Link href='/login' className='text-blue-500'>
                                 sign in!
                             </Link>
