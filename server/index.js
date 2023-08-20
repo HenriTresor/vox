@@ -8,6 +8,7 @@ import cors from 'cors'
 
 import userRouter from './routes/user.route.js'
 import authRouter from './routes/auth.route.js'
+import workspaceRouter from './routes/workspace.route.js'
 
 config()
 
@@ -34,6 +35,7 @@ const root = '/api/v1/'
 
 app.use(`${root}users`, userRouter)
 app.use(`${root}auth`, authRouter)
+app.use(`${root}workspaces`, workspaceRouter)
 app.all('*', (req, res, next) => {
     next(errorResponse(404, 'route not found'))
 })
