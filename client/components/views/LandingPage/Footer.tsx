@@ -70,7 +70,7 @@ const links = [
 
 const Footer = (props: Props) => {
     return (
-        <div className='w-full p-4  bg-neutral-900 text-white h-auto flex flex-col justify-between gap-10'>
+        <div className='w-full p-4  bg-neutral-900 text-white h-auto flex flex-col justify-between gap-10 mt-10'>
        
             <div className=' text-center flex flex-col sm:flex-row items-center gap-28'>
                 <div className='w-1/2 flex flex-col items-center gap-4'>

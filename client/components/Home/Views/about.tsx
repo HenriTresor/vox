@@ -28,10 +28,10 @@ const AboutUs = (props: Props) => {
         <div
             className='sm:h-[100dvh] min-h-screen flex flex-col md:flex-row justify-center md:items-center'
         >
-            <div className='w-1/2 h-full bg-none border-r-4  border-black  text-black hidden md:flex text-center items-center justify-center text-[3rem] tracking-wider'>
+            <div className='w-1/2 h-full bg-none border-r-4  border-black  text-white bg-black hidden rounded-full md:flex text-center items-center justify-center text-[3rem] tracking-wider'>
                 <div className='w-full p-4'>
                     <h1>Why Choose Us</h1>
-                    <p className='text-[0.4em] text-neutral-700 mt-10 '>We are a team of dedicated developers,<br /> working to provide solutions!</p>
+                    <p className='text-[0.4em]  mt-10 '>We are a team of dedicated developers,<br /> working to provide solutions!</p>
                     <Link href={'/signup'}>
                         <Button>Find more →</Button>
                     </Link>
