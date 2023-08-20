@@ -52,3 +52,20 @@ export const getUserWorkspaces = async (req, res, next) => {
         next(errorResponse(500, 'something went wrong'))
     }
 }
+
+export const getSingleWorkspace = async (req, res, next) => {
+    try {
+        let { workspaceId } = req.params
+        if (!workspaceId) return next(errorResponse(400, 'workspace id must be provided'))
+
+        let workspace = await Workspace.findById(workspaceId).populate('admin').populate('members')
+        if (!workspace) return next(errorResponse(400, 'workspace not found'))
+        res.status(200).json({
+            status: true,
+            workspace
+        })
+    } catch (error) {
+        console.log('[getting-workspace]', error.message)
+        next(errorResponse(500, 'something went wrong'))
+    }
+}

@@ -32,6 +32,9 @@ function Page({ }: Props) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    !localStorage.getItem('email') && router.push('/login')
+  }, [])
+  useEffect(() => {
     const getWorkspaces = async () => {
       try {
         const res = await api.server.GET(`/workspaces/${user?._id}`)

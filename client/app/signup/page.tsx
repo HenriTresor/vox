@@ -3,7 +3,7 @@ import Logo from '@/components/reusables/logo'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { NotifyContext } from '@/context/NotifyContext'
 import api from '@/lib/api'
 import { useRouter } from 'next/navigation'
@@ -22,6 +22,9 @@ function Page({ }: Props) {
         password: '',
         passwordConfirmation: ''
     })
+    useEffect(() => {
+        localStorage.getItem('email') && router.push('/choose-workspace')
+    }, [])
     const [loading, setLoading] = React.useState(false)
     const handleChange = (e: any) => setInputValues(prev => ({ ...prev, [e.target.name]: e.target.value }))
     const handleSubmit = async () => {

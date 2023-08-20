@@ -2,6 +2,7 @@
 import React, { useEffect, useContext } from 'react'
 import { NotifyContext } from './NotifyContext'
 import api from '@/lib/api'
+import { useRouter } from 'next/navigation'
 
 type Props = {
     children: React.ReactNode
@@ -32,6 +33,8 @@ function AuthContextProvider({ children }: Props) {
     const [authenticated, setAuthenticated] = React.useState<boolean>(false)
     const [user, setUser] = React.useState<User | null>(null)
     const { notify } = useContext(NotifyContext)
+    const router = useRouter()
+   
     const getUser = React.useCallback(async () => {
         try {
             const res = await api.server.GET('/users/me')

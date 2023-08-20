@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button'
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import React from 'react'
+import Link from 'next/link'
 
 type Props = {}
 
@@ -31,7 +32,9 @@ const AboutUs = (props: Props) => {
                 <div className='w-full p-4'>
                     <h1>Why Choose Us</h1>
                     <p className='text-[0.4em] text-neutral-700 mt-10 '>We are a team of dedicated developers,<br /> working to provide solutions!</p>
-                    <Button>Find more →</Button>
+                    <Link href={'/signup'}>
+                        <Button>Find more →</Button>
+                    </Link>
                </div>
             </div>
             <div className='w-full p-4 block  md:hidden text-[2rem] '>

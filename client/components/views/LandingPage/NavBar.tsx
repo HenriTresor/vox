@@ -7,6 +7,7 @@ import { Menu } from 'lucide-react'
 import MenuBar from './Menu'
 import { useRouter } from 'next/navigation'
 import { AuthContext } from '@/context/AuthContext'
+import Link from 'next/link'
 
 type Props = {}
 
@@ -25,7 +26,9 @@ function NavBar({ }: Props) {
         <div className='w-full h-auto p-3 flex justify-between items-center sticky top-0 z-10 bg-white'>
 
             <div className='flex w-1/2 justify-evenly items-center'>
-                <Logo />
+                <Link href={'/'}>
+                    <Logo />
+                </Link>
                 <nav className='items-center w-full justify-evenly hidden md:flex'>
                     {
                         navItems.map(item => (
