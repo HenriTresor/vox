@@ -23,7 +23,7 @@ function NavBar({ }: Props) {
     const {authenticated, user} = useContext(AuthContext)
     return (
         <div className='w-full h-auto p-3 flex justify-between items-center sticky top-0 z-10 bg-white'>
-            
+
             <div className='flex w-1/2 justify-evenly items-center'>
                 <Logo />
                 <nav className='items-center w-full justify-evenly hidden md:flex'>
@@ -41,7 +41,7 @@ function NavBar({ }: Props) {
             {
                 !authenticated ? (
                     <div className='p-2 hidden gap-4 sm:flex'>
-                        <Button variant='outline'>
+                        <Button variant='outline' onClick={() => router.push('/login')}>
                             login
                         </Button>
                         <Button variant='default' onClick={() => router.push('/signup')}>

@@ -43,7 +43,9 @@ function AuthContextProvider({ children }: Props) {
             notify({ message: error.message, type: 'error' })
         }
     }, [])
-    useEffect(() => { getUser() }, [])
+    useEffect(() => {
+        localStorage.getItem('email') && getUser()
+    }, [])
     const value = {
         authenticated, setAuthenticated, user, setUser
     }

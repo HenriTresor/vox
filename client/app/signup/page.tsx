@@ -7,6 +7,7 @@ import React from 'react'
 import { NotifyContext } from '@/context/NotifyContext'
 import api from '@/lib/api'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 
 type Props = {}
 
@@ -76,6 +77,12 @@ function Page({ }: Props) {
                         </div>
 
                         <Button type='submit' onClick={handleSubmit} disabled={loading}>Create account</Button>
+                        <p className='mt-5 text-[.9rem] flex gap-1'>
+                           Already have an account?
+                            <Link href='/login' className='text-blue-500'>
+                                sign in!
+                            </Link>
+                        </p>
                     </div>
                 </div>
 

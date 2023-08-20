@@ -7,6 +7,7 @@ import React from 'react'
 import { NotifyContext } from '@/context/NotifyContext'
 import api from '@/lib/api'
 import { useRouter } from 'next/navigation'
+import  Link  from 'next/link'
 
 type Props = {}
 
@@ -55,9 +56,21 @@ function Page({ }: Props) {
                         <div className="input-container">
                             <Label htmlFor='password'>password</Label>
                             <Input onChange={(e) => handleChange(e)} type='password' id='password' placeholder='create password' name='password' />
+                            <p className='mt-5 text-[.9rem] flex gap-1'>Forgot password? 
+
+                                <Link href='/reset-password' className='text-blue-500'>
+                                   reset
+                                </Link>
+                            </p>
                         </div>
 
                         <Button type='submit' onClick={handleSubmit} disabled={loading}>Login</Button>
+                        <p className='mt-5 text-[.9rem] flex gap-1'>
+                            Don&apos;t have an account yet?
+                            <Link href='/signup' className='text-blue-500'>
+                                sign up!
+                            </Link>
+                        </p>
                     </div>
                 </div>
 

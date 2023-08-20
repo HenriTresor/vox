@@ -7,13 +7,17 @@ import sendEmail from './utils/emailTransporter.js'
 import cors from 'cors'
 
 import userRouter from './routes/user.route.js'
+import authRouter from './routes/auth.route.js'
 
 config()
 
 const app = express()
 
 app.use(express.json())
-app.use(cors())
+app.use(cors({
+    origin: '*',
+    credentials: true
+}))
 // app.use(express.urlencoded({ extended: false }))
 
 dbConfig(process.env.MONGO_URL || 'mongodb://127.0.0.1:27017/vox').then((conn) => {
@@ -29,6 +33,7 @@ dbConfig(process.env.MONGO_URL || 'mongodb://127.0.0.1:27017/vox').then((conn) =
 const root = '/api/v1/'
 
 app.use(`${root}users`, userRouter)
+app.use(`${root}auth`, authRouter)
 app.all('*', (req, res, next) => {
     next(errorResponse(404, 'route not found'))
 })
