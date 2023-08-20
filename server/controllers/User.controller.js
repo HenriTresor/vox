@@ -1,3 +1,4 @@
+import { hash } from "bcrypt";
 import User from "../models/User.model.js";
 import { checkUserWithEmail, checkUserWithId } from "../utils/checkUser.js";
 import createToken from "../utils/createToken.js";
@@ -74,13 +75,14 @@ export const sendVerificationCode = async (req, res, next) => {
             type === 'verification' ? 'verify email' : 'reset your password',
             type === 'verification' ? verifyEmailMessage : passwordResetMessage
         )
-        if (emailResponse) {
+        console.log(emailResponse)
+        if (emailResponse === true) {
             return res.status(200).json({
                 status: true, message: 'a code was sent to your email. Check it to continue'
             })
         }
         res.status(500).json({
-            status: fale,
+            status: false,
             message: 'something went wrong'
         })
     } catch (error) {
@@ -143,6 +145,25 @@ export const getUserProfile = async (req, res, next) => {
     } catch (error) {
 
         console.log('[getting-profile]', error.message)
+        next(errorResponse(500, 'something went wrong'))
+    }
+}
+
+
+export const resetPassword = async (req, res, next) => {
+    try {
+        const { password, email } = req.body
+        if (!password || !email) return next(errorResponse(400, 'new password is required'))
+        let user = await User.findOne({ email }).select('-password')
+        if (!user) return next(errorResponse(404, 'user was not found'))
+        const hashedPwd = await hash(password, 10)
+        await User.findOneAndUpdate({ email }, { password: hashedPwd })
+        res.status(200).json({
+            status: true,
+            message: 'password was reset successfully'
+        })
+    } catch (error) {
+        console.log('[reseting-pwd]', error.message)
         next(errorResponse(500, 'something went wrong'))
     }
 }

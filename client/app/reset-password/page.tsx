@@ -19,33 +19,57 @@ function Page({ }: Props) {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [code, setCode] = useState<number>(0)
-    
+    const [codeIsSent, setCodeIsSent] = useState(false)
+    const [codeIsCorrect, setCodeIsCorrect] = useState(false)
+
     const requestCode = async () => {
         try {
             const res = await api.server.POST('/users/accounts/send-code', {
-
+                email
             })
             const data = await res.json()
             notify({ message: data.message, type: 'info' })
+            if(data.status) setCodeIsSent(true)
         } catch (error: any) {
             notify({ message: error.message, type: 'error' })
         }
     }
 
-    const verifyAccount = async () => {
+    const verifyPasswordResetCode = async () => {
         setLoading(true)
         try {
 
-            const res = await api.server.POST('/users/accounts/verify', {
-                code: inputRef.current?.value,
-                email: localStorage.getItem('email')
+            const res = await api.server.POST('/users/accounts/verify/password-reset-code', {
+                code,
+                email
             })
 
             const data = await res.json()
             if (!data.status) return notify({ message: data.message, type: 'error' })
 
             notify({ message: data.message, type: 'success' })
-            router.push('/')
+            setCodeIsCorrect(true)
+        } catch (error: any) {
+            notify({ message: error.message, type: 'error' })
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    const resetPassword = async () => {
+        setLoading(true)
+        try {
+
+            const res = await api.server.POST('/users/accounts/reset-password', {
+                password,
+                email
+            })
+
+            const data = await res.json()
+            if (!data.status) return notify({ message: data.message, type: 'error' })
+
+            notify({ message: data.message+ '. Login to continue', type: 'success' })
+            router.push('/login')
         } catch (error: any) {
             notify({ message: error.message, type: 'error' })
         } finally {
@@ -66,7 +90,9 @@ function Page({ }: Props) {
                     />
                     <Button onClick={requestCode} disabled={loading}>Request code</Button>
                 </div>
-                <div className="input-container">
+                {
+                    codeIsSent && (
+                         <div className="input-container">
                     <Input
                         type='number'
                         className='text-center'
@@ -74,18 +100,24 @@ function Page({ }: Props) {
                         value={code}
                         onChange={(e) => setCode(Number(e.target.value))}
                     />
-                    <Button onClick={verifyAccount} disabled={loading}>Send code</Button>
+                    <Button onClick={verifyPasswordResetCode} disabled={loading}>verify code</Button>
                 </div>
-                <div className="input-container">
-                    <Input
-                        type='password'
-                        className=''
-                        placeholder='new password'
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                    <Button onClick={verifyAccount} disabled={loading}>Reset password</Button>
-                </div>
+                    )
+                }
+                {
+                    codeIsCorrect && (
+                        <div className="input-container">
+                            <Input
+                                type='password'
+                                className=''
+                                placeholder='new password'
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                            />
+                            <Button disabled={loading} onClick={resetPassword}>Reset password</Button>
+                        </div>
+                    )
+                }
             </div>
             <Footer />
         </>
