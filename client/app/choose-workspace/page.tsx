@@ -8,8 +8,21 @@ import { NotifyContext } from '@/context/NotifyContext'
 import { AuthContext } from '@/context/AuthContext'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
+import Workspace from '@/components/Workspace'
 
 type Props = {}
+
+export type WorkspaceTypes = {
+  admin: string;
+  members: [];
+  name: string;
+  category: string,
+  inviteLink: string,
+  createdAt: Date,
+  updatedAt: Date,
+  avatar: string,
+  _id: string
+}
 
 function Page({ }: Props) {
   const { authenticated, user } = useContext(AuthContext)
@@ -46,13 +59,13 @@ function Page({ }: Props) {
             !workspaces?.length ?
               (
                 <>
-                  
-                  <p className='text-[1rem] mb-5'>{ loading ? 'retrieving workspaces, please wait ...' : 'No workspaces'} </p>
-                  <Button>Create one!</Button>
+
+                  <p className='text-[1rem] mb-5'>{loading ? 'retrieving workspaces, please wait ...' : 'No workspaces'} </p>
+                  <Button onClick={() => router.push('/create-workspace')}>Create one!</Button>
                 </>
               )
-              : workspaces.map(workspace => (
-                null
+              : workspaces.map((workspace: WorkspaceTypes) => (
+                <Workspace {...workspace} key={workspace._id} />
               ))
           }
         </div>

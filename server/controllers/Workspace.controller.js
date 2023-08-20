@@ -1,7 +1,11 @@
 import Workspace from "../models/Workspace.model.js";
 import workspaceValidObject from "../validators/workspace.joi.js";
-
 import errorResponse from '../utils/errorResponse.js'
+import crypto from 'crypto'
+
+const generateInviteLink = (name) => {
+    return String(`${process.env.FRONTEND_URL}/${name}/invite/${crypto.randomBytes(10).toString('hex')}`)
+}
 
 export const createWorkspace = async (req, res, next) => {
     try {
@@ -10,12 +14,15 @@ export const createWorkspace = async (req, res, next) => {
 
         if (error) return next(errorResponse(400, error.details[0].message))
 
-        let newWorkspace = await new Workspace({
+        let newWorkspace = new Workspace({
             name: value.name,
             category: value.category,
-            admin: value.admin
-        }).save()
+            inviteLink: generateInviteLink(value.name),
+            admin: value.admin,
+            members: [admin]
+        })
 
+        await newWorkspace.save()
         res.status(201).json({
             status: true,
             message: 'workspace created',
