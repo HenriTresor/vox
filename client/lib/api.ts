@@ -13,12 +13,13 @@ const api = {
       });
     },
     GET: async (path: string) => {
-      const token = getCookie('access_token');
-      console.log(token)
+      const token = getCookie("access_token");
+      console.log(token);
       return fetch(`${BASE_URL}${path}`, {
-        method: "POST",
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
       });
     },

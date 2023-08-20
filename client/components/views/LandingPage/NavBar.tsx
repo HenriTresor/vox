@@ -1,11 +1,12 @@
 'use client'
-import React from 'react'
+import React, { useContext } from 'react'
 import NavItem from './NavItem'
 import { Button } from '@/components/ui/button'
 import Logo from '@/components/reusables/logo'
 import { Menu } from 'lucide-react'
 import MenuBar from './Menu'
 import { useRouter } from 'next/navigation'
+import { AuthContext } from '@/context/AuthContext'
 
 type Props = {}
 
@@ -19,6 +20,7 @@ export const navItems = [
 function NavBar({ }: Props) {
     const router = useRouter()
     const [isMenuOpen, setIsMenuOpen] = React.useState(false)
+    const {authenticated, user} = useContext(AuthContext)
     return (
         <div className='w-full h-auto p-3 flex justify-between items-center sticky top-0 z-10 bg-white'>
             <div className='flex w-1/2 justify-evenly items-center'>
@@ -35,14 +37,22 @@ function NavBar({ }: Props) {
             <Button variant={'ghost'} className='md:hidden block ' onClick={() => setIsMenuOpen(true)}>
                 <Menu />
             </Button>
-            <div className='p-2 hidden gap-4 sm:flex'>
-                <Button variant='outline'>
-                    login
-                </Button>
-                <Button variant='default' onClick={() => router.push('/signup')}>
-                    join us
-                </Button>
-            </div>
+            {
+                !authenticated ? (
+                    <div className='p-2 hidden gap-4 sm:flex'>
+                        <Button variant='outline'>
+                            login
+                        </Button>
+                        <Button variant='default' onClick={() => router.push('/signup')}>
+                            join us
+                        </Button>
+                    </div>
+                ) : (
+                        <Button variant='outline'>
+                            profile
+                        </Button>
+                )
+          }
         </div>
     )
 }

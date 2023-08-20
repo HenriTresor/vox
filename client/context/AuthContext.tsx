@@ -32,15 +32,17 @@ function AuthContextProvider({ children }: Props) {
     const [authenticated, setAuthenticated] = React.useState<boolean>(false)
     const [user, setUser] = React.useState<User | null>(null)
     const { notify } = useContext(NotifyContext)
-    const getUser = async () => {
+    const getUser = React.useCallback(async () => {
         try {
-            const res = await api.server.GET('/user/me')
+            const res = await api.server.GET('/users/me')
             const data = await res.json()
-            notify({ message: data.message, type: 'info' })
+            if (!data.status) return notify({ message: data.message, type: 'error' })
+            setAuthenticated(true)
+            setUser(data.user)
         } catch (error: any) {
             notify({ message: error.message, type: 'error' })
         }
-    }
+    }, [])
     useEffect(() => { getUser() }, [])
     const value = {
         authenticated, setAuthenticated, user, setUser

@@ -96,3 +96,21 @@ export const verifyAccount = async (req, res, next) => {
         next(errorResponse(500, 'internal server error'))
     }
 }
+
+export const getUserProfile = async (req, res, next) => {
+    try {
+
+        let { userId } = req
+        let user = await User.findById(userId).select('-password')
+        if (!user) return next(errorResponse(404, 'user was not found'))
+
+        res.status(200).json({
+            status: true,
+            user
+        })
+    } catch (error) {
+
+        console.log('[getting-profile]', error.message)
+        next(errorResponse(500, 'something went wrong'))
+    }
+}
