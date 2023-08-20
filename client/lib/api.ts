@@ -1,3 +1,5 @@
+import getCookie from "./getCookie";
+
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 const api = {
   server: {
@@ -11,6 +13,8 @@ const api = {
       });
     },
     GET: async (path: string) => {
+      const token = getCookie('access_token');
+      console.log(token)
       return fetch(`${BASE_URL}${path}`, {
         method: "POST",
         headers: {

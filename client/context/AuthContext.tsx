@@ -1,5 +1,7 @@
 'use client'
-import React from 'react'
+import React, { useEffect, useContext } from 'react'
+import { NotifyContext } from './NotifyContext'
+import api from '@/lib/api'
 
 type Props = {
     children: React.ReactNode
@@ -29,7 +31,17 @@ function AuthContextProvider({ children }: Props) {
 
     const [authenticated, setAuthenticated] = React.useState<boolean>(false)
     const [user, setUser] = React.useState<User | null>(null)
-
+    const { notify } = useContext(NotifyContext)
+    const getUser = async () => {
+        try {
+            const res = await api.server.GET('/user/me')
+            const data = await res.json()
+            notify({ message: data.message, type: 'info' })
+        } catch (error: any) {
+            notify({ message: error.message, type: 'error' })
+        }
+    }
+    useEffect(() => { getUser() }, [])
     const value = {
         authenticated, setAuthenticated, user, setUser
     }

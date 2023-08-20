@@ -12,7 +12,7 @@ type Props = {
 function Alert({ isAlertOpen, setAlertOpen, type, message }: Props) {
     return (
         <div
-            className='fixed top-5 right-5 bg-white shadow-2xl border w-[20dvw] flex flex-col gap-2 p-2 rounded-md'
+            className='fixed top-5 right-5 bg-white shadow-2xl border w-[20dvw] flex flex-col gap-2 p-2 rounded-md z-20'
         >
             <div className='flex w-full justify-between items-center'>
                 <div className='flex items-center gap-3'>

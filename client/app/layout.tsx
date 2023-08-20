@@ -14,17 +14,16 @@ export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
-  }) {
-  
-  const user = await api.server.GET('/getuser')
+}) {
+
   return (
     <html lang="en">
       <body>
-        <AuthContextProvider>
-          <NotifyContextProvider>
+        <NotifyContextProvider>
+          <AuthContextProvider>
             {children}
-          </NotifyContextProvider>
-        </AuthContextProvider>
+          </AuthContextProvider>
+        </NotifyContextProvider>
       </body>
     </html>
   )
