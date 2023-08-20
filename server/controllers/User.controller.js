@@ -50,21 +50,33 @@ export const createUser = async (req, res, next) => {
 
 export const sendVerificationCode = async (req, res, next) => {
     try {
-        let { email } = req.body
+        let { email, type } = req.body
         if (!email) return next(errorResponse(400, 'email is required'))
         let user = await checkUserWithEmail(email)
         if (!user) return next(errorResponse(404, `user with email ${email} was not found`))
-        if (user.verifiedAccount) return next(errorResponse(400, `account with email ${email} is already verified`))
+
+        if (user.verifiedAccount && type === 'verification') return next(errorResponse(400, `account with email ${email} is already verified`))
 
         const code = generateVerificationCode()
-        await User.findOneAndUpdate({ email: user.email }, {
-            verificationCode: code
-        })
+        if (type === 'verification') {
+            await User.findOneAndUpdate({ email: user.email }, {
+                verificationCode: code
+            })
+        } else {
+            await User.findOneAndUpdate({ email: user.email }, {
+                passwordResetCode: code
+            })
+        }
 
-        const emailResponse = await sendEmail(user.email, 'verify your account', `enter this code to verify your email ${code}`)
+        const passwordResetMessage = `Enter this code to reset your password ${code}`
+        const verifyEmailMessage = `enter this code to verify your email ${code}`
+        const emailResponse = await sendEmail(user.email,
+            type === 'verification' ? 'verify email' : 'reset your password',
+            type === 'verification' ? verifyEmailMessage : passwordResetMessage
+        )
         if (emailResponse) {
             return res.status(200).json({
-                status: true, message: 'a code was sent to your email. Check it to verify your account'
+                status: true, message: 'a code was sent to your email. Check it to continue'
             })
         }
         res.status(500).json({
@@ -76,6 +88,26 @@ export const sendVerificationCode = async (req, res, next) => {
         next(errorResponse(500, 'internal server error'))
     }
 }
+
+export const verifyPasswordResetCode = async (req, res, next) => {
+    try {
+        let { code, email } = req.body
+
+        if (!code || !email) return next(errorResponse(400, 'you must provide the verification code and the user id'))
+        const user = await User.findOne({ email })
+        if (!user) return next(errorResponse(404, 'user was not found'))
+
+        if (user.passwordResetCode === Number(code)) {
+
+            return res.status(200).json({ status: true, message: 'code is correct' })
+        }
+        res.status(400).json({ status: false, message: 'code is incorrect' })
+    } catch (error) {
+        console.log('[verifying-code]:', error.message)
+        next(errorResponse(500, 'internal server error'))
+    }
+}
+
 export const verifyAccount = async (req, res, next) => {
     try {
         const { code, email } = req.body

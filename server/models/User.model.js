@@ -1,4 +1,5 @@
 import { hash } from "bcrypt";
+import { number } from "joi";
 import { Schema, model } from "mongoose";
 
 const UserSchema = new Schema({
@@ -18,6 +19,10 @@ const UserSchema = new Schema({
         type: Number,
         required: true,
         default: 0
+    },
+    passwordResetCode: {
+        type: Number,
+        required: true, default: 0
     }
 },
     {
