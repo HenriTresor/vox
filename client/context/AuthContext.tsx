@@ -8,7 +8,7 @@ type Props = {
     children: React.ReactNode
 }
 
-type User = {
+export type User = {
     email: string,
     firstName: string,
     lastName: string,

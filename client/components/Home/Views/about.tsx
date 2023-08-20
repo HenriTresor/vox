@@ -39,7 +39,7 @@ const AboutUs = (props: Props) => {
             </div>
             <div className='w-full p-4 block  md:hidden text-[2rem] '>
                 <h1>Why Choose Us</h1>
-                <p className='text-[0.4em] text-neutral-700 mt-10 '>We are a team of dedicated developers,<br /> working to provide solutions!</p>
+                <p className='text-[0.4em] text-neutral-700 mt-10 '>We are a team of dedicated developers,<br /> working to provide spolutions!</p>
             </div>
             <div className='md:w-1/2 w-full p-4 grid sm:grid-cols-2 grid-cols-1 gap-5 h-full place-content-center'>
             {
