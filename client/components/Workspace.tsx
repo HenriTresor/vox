@@ -1,10 +1,13 @@
+'use client'
 import { WorkspaceTypes } from '@/app/choose-workspace/page'
 import React from 'react'
 import { Button } from './ui/button'
+import { useRouter } from 'next/navigation'
 
 type Props = {}
 
-function Workspace({ name, avatar, members }: WorkspaceTypes) {
+function Workspace({ name, avatar, members, _id }: WorkspaceTypes) {
+    const router = useRouter()
     return (
 
         <div className='w-full border-2 p-3 flex justify-center items-center mb-5'>
@@ -17,8 +20,10 @@ function Workspace({ name, avatar, members }: WorkspaceTypes) {
                     <p className='font-mono text-neutral-600'>members: {members.length}</p>
                 </div>
             </div>
-            <Button size={'icon'} >→</Button>
-       </div>
+            <Button size={'icon'}
+                onClick={() => router.push(`/workspaces/${_id}`)}
+            >→</Button>
+        </div>
     )
 }
 

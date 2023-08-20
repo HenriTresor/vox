@@ -64,6 +64,7 @@ function Page({ }: Props) {
                             placeholder='enter your organisation category (default: uncategorized)'
                         />
                     </div>
+                    <Button onClick={()=>router.push('/choose-workspace')} variant={'outline'} className='mr-5'>Choose workspace</Button>
                     <Button onClick={createWorkspace}>Create workspace</Button>
                 </div>
             </div>
