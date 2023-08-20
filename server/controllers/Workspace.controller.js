@@ -119,7 +119,7 @@ export const acceptInvite = async (req, res, next) => {
     try {
 
         let { recipientId, slug } = req.body
-        if (!recipientId) return next(errorResponse(400, 'recipient id is required'))
+        if (!recipientId || !slug) return next(errorResponse(400, 'recipient id and workspace slug is required'))
 
         let user = await checkUserWithId(recipientId)
         if (!user) return next(errorResponse(404, 'user was not found'))
@@ -131,6 +131,10 @@ export const acceptInvite = async (req, res, next) => {
             $push: {
                 members: recipientId
             }
+        })
+        res.status(200).json({
+            status: true,
+            message: 'invite accepted. You are now a member'
         })
     } catch (error) {
         console.log('[accepting-invite]', error.message)

@@ -11,7 +11,7 @@ import Body from '@/components/dashboard/views/Body'
 type Props = {}
 
 function Page({ }: Props) {
-    const { workspaceId } = useParams()
+    const { slug } = useParams()
     const { notify } = useContext(NotifyContext)
     const [workspace, setWorkspace] = useState<WorkspaceTypes | any>({
     })
@@ -23,7 +23,7 @@ function Page({ }: Props) {
     useEffect(() => {
         const getWorkspace = async () => {
             try {
-                const res = await api.server.GET(`/workspaces/single/${workspaceId}`)
+                const res = await api.server.GET(`/workspaces/single/${slug}`)
                 const data = await res.json()
                 if (!data.status) return notify({ message: data.message, type: 'error' })
                 setWorkspace(data.workspace)
@@ -43,7 +43,7 @@ function Page({ }: Props) {
     return (
         <div className='w-full min-h-screen border flex justify-start items-start p-0 relative left-0 top-0'>
             <SideBar
-              {...workspace}
+                {...workspace}
             />
             <Body />
         </div>

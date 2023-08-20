@@ -1,26 +1,38 @@
 'use client'
 
 import { WorkspaceTypes } from '@/app/choose-workspace/page'
+import Workspace from '@/components/Workspace'
+import Loading from '@/components/reusables/loading'
+import { Button } from '@/components/ui/button'
+import Footer from '@/components/views/LandingPage/Footer'
+import NavBar from '@/components/views/LandingPage/NavBar'
 import { AuthContext } from '@/context/AuthContext'
 import { NotifyContext } from '@/context/NotifyContext'
 import api from '@/lib/api'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import React, { useContext, useEffect, useState } from 'react'
 
 type Props = {}
 
 function Page({ }: Props) {
   const { slug, inviteCode } = useParams()
-  const [workspace, setWorkspace] = useState<WorkspaceTypes>()
+  const [workspace, setWorkspace] = useState<WorkspaceTypes | any>(null)
   const { notify } = useContext(NotifyContext)
   const { user } = useContext(AuthContext)
+  const [isInviteCodeCorrect, setIsInviteCodeCorrect] = useState(false)
+  const router = useRouter()
+  useEffect(() => {
+    !localStorage.getItem('email') && router.push('/login')
+  }, [])
   useEffect(() => {
     const getWorkspace = async () => {
       try {
         const res = await api.server.GET(`/workspaces/single/${slug}`)
 
         const data = await res.json()
-        notify({message:data.message, type:'info'})
+        if (!data.status) return notify({ message: data.message, type: 'error' })
+
+        setWorkspace(data.workspace)
       } catch (error: any) {
         notify({ message: error.message, type: 'error' })
       }
@@ -28,8 +40,58 @@ function Page({ }: Props) {
     getWorkspace()
   }, [])
 
+  useEffect(() => {
+    const checkInviteCode = async () => {
+      try {
+        const res = await api.server.POST(`/workspaces/invite/check-code`, {
+          inviteCode,
+          slug
+        })
+
+        const data = await res.json()
+        if (!data.status) return notify({ message: data.message, type: 'error' })
+
+        setIsInviteCodeCorrect(true)
+      } catch (error: any) {
+        notify({ message: error.message, type: 'error' })
+      }
+    }
+    checkInviteCode()
+  }, [])
+
+  const acceptInvite = async () => {
+    try {
+      const res = await api.server.POST(`/workspaces/invite/accept`, {
+        slug,
+        recipientId: user?._id
+      })
+
+      const data = await res.json()
+      if (!data.status) return notify({ message: data.message, type: 'error' })
+      notify({ message: data.message, type: 'success' })
+      router.push('/choose-workspace')
+    } catch (error: any) {
+      notify({ message: error.message, type: 'error' })
+    }
+  }
   return (
-    <div>{slug} {inviteCode}</div>
+    <>
+      <NavBar />
+      <div className='h-[100dvh] w-full grid place-content-center text-center'>
+        {
+          (workspace && isInviteCodeCorrect) ? (
+            <>
+              <h1 className='font-bold text-[2rem] mb-5'>You were invited to join the following workspace:</h1>
+              <Workspace {...workspace} />
+              <Button onClick={acceptInvite}>Accept</Button>
+            </>
+          ) : (
+            <Loading />
+          )
+        }
+      </div>
+      <Footer />
+    </>
   )
 }
 

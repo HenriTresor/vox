@@ -22,7 +22,8 @@ export type WorkspaceTypes = {
   updatedAt: Date,
   avatar: string,
   _id: string,
-  channels?: []
+  channels?: [],
+  slug: string
 }
 
 function Page({ }: Props) {
