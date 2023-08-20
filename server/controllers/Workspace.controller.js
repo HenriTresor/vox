@@ -90,3 +90,48 @@ export const getSingleWorkspace = async (req, res, next) => {
         next(errorResponse(500, 'something went wrong'))
     }
 }
+
+export const checkInviteCode = async (req, res, next) => {
+    try {
+        const { inviteCode, workspaceName } = req.body
+
+        if (!inviteCode || !workspaceName) return next(errorResponse(400, 'invite code and workpace name are required'))
+
+        let workspace = await Workspace.findOne({ name: workspaceName })
+        if (!workspace) return next(errorResponse(404, 'workspace not found'))
+
+        if (workspace.inviteCode !== String(inviteCode)) return next(errorResponse(401, 'invalid invite code. Please request the correct one.'))
+
+        res.status(200).json(
+            {
+                status: true,
+            }
+        )
+    } catch (error) {
+        console.log('[checking-invite-code]', error.message)
+        next(errorResponse(500, 'something went wrong'))
+    }
+}
+
+export const acceptInvite = async (req, res, next) => {
+    try {
+
+        let { recipientId, workspaceName } = req.body
+        if (!recipientId) return next(errorResponse(400, 'recipient id is required'))
+
+        let user = await checkUserWithId(recipientId)
+        if (!user) return next(errorResponse(404, 'user was not found'))
+        let workspace = await Workspace.findOne({ name: workspaceName })
+        if (!workspace) return next(errorResponse(404, 'workspace not found'))
+
+        if (workspace.members.includes(recipientId)) return next(errorResponse(409, 'user is already a member'))
+        await Workspace.findOneAndUpdate({ name: workspaceName }, {
+            $push: {
+                members: recipientId
+            }
+        })
+    } catch (error) {
+        console.log('[accepting-invite]', error.message)
+        next(errorResponse(500, 'something went wrong'))
+    }
+}
