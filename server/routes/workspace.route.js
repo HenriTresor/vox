@@ -1,9 +1,10 @@
 import { Router } from 'express'
-import { createWorkspace, getSingleWorkspace, getUserWorkspaces } from '../controllers/Workspace.controller.js'
+import { acceptInvite, checkInviteCode, createWorkspace, getSingleWorkspace, getUserWorkspaces } from '../controllers/Workspace.controller.js'
 const router = Router()
 
 router.get('/:userId', getUserWorkspaces)
-router.get('/single/:workspaceId', getSingleWorkspace)
+router.get('/single/:slug', getSingleWorkspace)
 router.post('/', createWorkspace)
-
+router.post('/invite/check-code', checkInviteCode)
+router.post('/invite/accept', acceptInvite)
 export default router

@@ -2,6 +2,7 @@ import { Schema, model } from 'mongoose'
 
 const WorkspaceSchema = new Schema(
     {
+        slug: { type: String },
         name: { type: String, required: true, trim: true },
         category: { type: String, required: true, default: 'uncategorized' },
         inviteLink: {

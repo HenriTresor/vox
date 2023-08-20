@@ -10,4 +10,5 @@ router.post('/accounts/verify', verifyAccount)
 router.post('/accounts/verify/password-reset-code', verifyPasswordResetCode)
 router.post('/accounts/reset-password', resetPassword)
 router.post('/accounts/send-code', sendVerificationCode)
+
 export default router

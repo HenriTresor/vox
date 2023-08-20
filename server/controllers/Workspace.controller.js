@@ -6,7 +6,7 @@ import sendEmail from "../utils/emailTransporter.js";
 import { checkUserWithId } from "../utils/checkUser.js";
 
 const generateInviteLink = (name) => {
-    inviteCode = crypto.randomBytes(10).toString('hex')
+    const inviteCode = crypto.randomBytes(10).toString('hex')
     return {
         inviteLink: String(`${process.env.FRONTEND_URL}/${name}/invite/${inviteCode}`),
         inviteCode
@@ -20,8 +20,10 @@ export const createWorkspace = async (req, res, next) => {
         if (error) return next(errorResponse(400, error.details[0].message))
         let creator = await checkUserWithId(admin)
         if (!creator) return next(errorResponse(404, 'creator was not found'))
-        const { inviteCode, inviteLink } = generateInviteLink(value.name)
+        const slug = value.name + '-' + creator._id
+        const { inviteLink, inviteCode } = generateInviteLink(slug)
         let newWorkspace = new Workspace({
+            slug,
             name: value.name,
             category: value.category,
             inviteLink,
@@ -32,7 +34,7 @@ export const createWorkspace = async (req, res, next) => {
             }],
             admin: value.admin,
             members: [admin],
-            inviteCode
+            inviteCode: inviteCode
         })
 
         await newWorkspace.save()
@@ -76,10 +78,10 @@ export const getUserWorkspaces = async (req, res, next) => {
 
 export const getSingleWorkspace = async (req, res, next) => {
     try {
-        let { workspaceId } = req.params
-        if (!workspaceId) return next(errorResponse(400, 'workspace id must be provided'))
+        let { slug } = req.params
+        if (!slug) return next(errorResponse(400, 'workspace id must be provided'))
 
-        let workspace = await Workspace.findById(workspaceId).populate('admin').populate('members')
+        let workspace = await Workspace.findOne({ slug }).populate('admin').populate('members')
         if (!workspace) return next(errorResponse(400, 'workspace not found'))
         res.status(200).json({
             status: true,
@@ -93,11 +95,11 @@ export const getSingleWorkspace = async (req, res, next) => {
 
 export const checkInviteCode = async (req, res, next) => {
     try {
-        const { inviteCode, workspaceName } = req.body
+        const { inviteCode, slug } = req.body
 
-        if (!inviteCode || !workspaceName) return next(errorResponse(400, 'invite code and workpace name are required'))
+        if (!inviteCode || !slug) return next(errorResponse(400, 'invite code and workpace name are required'))
 
-        let workspace = await Workspace.findOne({ name: workspaceName })
+        let workspace = await Workspace.findOne({ slug })
         if (!workspace) return next(errorResponse(404, 'workspace not found'))
 
         if (workspace.inviteCode !== String(inviteCode)) return next(errorResponse(401, 'invalid invite code. Please request the correct one.'))
@@ -116,16 +118,16 @@ export const checkInviteCode = async (req, res, next) => {
 export const acceptInvite = async (req, res, next) => {
     try {
 
-        let { recipientId, workspaceName } = req.body
+        let { recipientId, slug } = req.body
         if (!recipientId) return next(errorResponse(400, 'recipient id is required'))
 
         let user = await checkUserWithId(recipientId)
         if (!user) return next(errorResponse(404, 'user was not found'))
-        let workspace = await Workspace.findOne({ name: workspaceName })
+        let workspace = await Workspace.findOne({ slug })
         if (!workspace) return next(errorResponse(404, 'workspace not found'))
 
         if (workspace.members.includes(recipientId)) return next(errorResponse(409, 'user is already a member'))
-        await Workspace.findOneAndUpdate({ name: workspaceName }, {
+        await Workspace.findOneAndUpdate({ slug }, {
             $push: {
                 members: recipientId
             }
