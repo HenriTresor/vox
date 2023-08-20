@@ -25,11 +25,11 @@ function Page({ }: Props) {
     const requestCode = async () => {
         try {
             const res = await api.server.POST('/users/accounts/send-code', {
-                email
+                email, type: 'password reset'
             })
             const data = await res.json()
             notify({ message: data.message, type: 'info' })
-            if(data.status) setCodeIsSent(true)
+            if (data.status) setCodeIsSent(true)
         } catch (error: any) {
             notify({ message: error.message, type: 'error' })
         }
@@ -68,7 +68,7 @@ function Page({ }: Props) {
             const data = await res.json()
             if (!data.status) return notify({ message: data.message, type: 'error' })
 
-            notify({ message: data.message+ '. Login to continue', type: 'success' })
+            notify({ message: data.message + '. Login to continue', type: 'success' })
             router.push('/login')
         } catch (error: any) {
             notify({ message: error.message, type: 'error' })
@@ -92,16 +92,16 @@ function Page({ }: Props) {
                 </div>
                 {
                     codeIsSent && (
-                         <div className="input-container">
-                    <Input
-                        type='number'
-                        className='text-center'
-                        placeholder='verification code'
-                        value={code}
-                        onChange={(e) => setCode(Number(e.target.value))}
-                    />
-                    <Button onClick={verifyPasswordResetCode} disabled={loading}>verify code</Button>
-                </div>
+                        <div className="input-container">
+                            <Input
+                                type='number'
+                                className='text-center'
+                                placeholder='verification code'
+                                value={code}
+                                onChange={(e) => setCode(Number(e.target.value))}
+                            />
+                            <Button onClick={verifyPasswordResetCode} disabled={loading}>verify code</Button>
+                        </div>
                     )
                 }
                 {

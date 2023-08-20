@@ -11,7 +11,7 @@ type Props = {}
 function SideBar({ name, members, channels }: WorkspaceTypes) {
     return (
         <div
-            className='w-1/5 h-[100dvh] bg-neutral-900 text-white'
+            className='sm:w-1/5 h-[100dvh] bg-neutral-900 text-white absolute sm:block w-1/2'
         >
             <div className='w-full h-auto p-2 flex border-b-2 items-center justify-between'>
                 <h1>{name?.toUpperCase()}</h1>
