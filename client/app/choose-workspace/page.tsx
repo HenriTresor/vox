@@ -64,12 +64,17 @@ function Page({ }: Props) {
                   <Button onClick={() => router.push('/create-workspace')}>Create one!</Button>
                 </>
               )
-              : workspaces.map((workspace: WorkspaceTypes) => (
-                <Workspace {...workspace} key={workspace._id} />
-              ))
+              : (
+              <>
+                {workspaces.map((workspace: WorkspaceTypes) => (
+                  <Workspace {...workspace} key={workspace._id} />
+                ))}
+                  <Button onClick={() => router.push('/create-workspace')}>Create workspace</Button>
+                </>
+        )
           }
-        </div>
       </div>
+    </div >
       <Footer />
     </>
   )

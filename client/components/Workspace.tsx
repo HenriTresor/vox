@@ -7,7 +7,7 @@ type Props = {}
 function Workspace({ name, avatar, members }: WorkspaceTypes) {
     return (
 
-        <div className='w-full border-2 p-3 flex justify-center items-center'>
+        <div className='w-full border-2 p-3 flex justify-center items-center mb-5'>
             <div
                 className='w-full text-left flex justify-start items-start'
             >
