@@ -23,6 +23,7 @@ function NavBar({ }: Props) {
     const {authenticated, user} = useContext(AuthContext)
     return (
         <div className='w-full h-auto p-3 flex justify-between items-center sticky top-0 z-10 bg-white'>
+            
             <div className='flex w-1/2 justify-evenly items-center'>
                 <Logo />
                 <nav className='items-center w-full justify-evenly hidden md:flex'>
