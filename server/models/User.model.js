@@ -22,6 +22,9 @@ const UserSchema = new Schema({
     passwordResetCode: {
         type: Number,
         required: true, default: 0
+    },
+    avatar: {
+        type: String
     }
 },
     {
