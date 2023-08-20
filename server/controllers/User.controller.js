@@ -20,21 +20,20 @@ export const createUser = async (req, res, next) => {
         const isExists = await checkUserWithEmail(value.email)
         if (isExists) return next(errorResponse(409, `user with ${value.email} already exists`))
         const verificationCode = generateVerificationCode()
-        let newUser = await new User({
-            email: value.email,
-            firstName: value.firstName,
-            lastName: value.lastName,
-            password: value.password,
-            verificationCode
-        }).save()
-
-        const emailResponse = await sendEmail(value.email, 'verify your account', `enter this code to verify your email ${newUser.verificationCode}`)
-
+        const emailResponse = await sendEmail(value.email, 'verify your account', `enter this code to verify your email ${verificationCode}`)
         if (emailResponse) {
+            let newUser = await new User({
+                email: value.email,
+                firstName: value.firstName,
+                lastName: value.lastName,
+                password: value.password,
+                verificationCode
+            }).save()
+
             const token = await createToken(newUser._id)
             return res.status(201).json({
                 status: true,
-                user: _.pick(newUser, ['_id', 'email', 'firstName', 'lastName', 'createdAt', 'updatedAt']),
+                user: _.pick(newUser, ['_id', 'email', 'firstName', 'lastName', 'createdAt', 'updatedAt', 'verifiedAccount']),
                 access_token: token,
                 message: 'an email was sent to you. Check to verify your account'
             })

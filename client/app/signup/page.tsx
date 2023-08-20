@@ -31,6 +31,7 @@ function Page({ }: Props) {
             if (!data.status) return notify({ message: data.message, type: 'error' })
             localStorage.setItem('email', data.user.email)
             document.cookie = `access_token=${data.access_token}`
+            notify({ message: data.message, type: 'info' })
             router.push('/verifyEmail')
         } catch (error: any) {
             notify({ message: error.message, type: 'error' })
