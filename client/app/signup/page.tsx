@@ -8,7 +8,6 @@ import { NotifyContext } from '@/context/NotifyContext'
 import api from '@/lib/api'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { AuthContext } from '@/context/AuthContext'
 
 type Props = {}
 
@@ -16,7 +15,6 @@ function Page({ }: Props) {
 
     const router = useRouter()
     const { notify } = React.useContext(NotifyContext)
-    const { setAuthenticated, setUser } = useContext(AuthContext)
     const [inputValues, setInputValues] = React.useState({
         email: '',
         firstName: '',
@@ -32,15 +30,7 @@ function Page({ }: Props) {
     const handleSubmit = async () => {
         setLoading(true)
         try {
-            const res = await api.server.POST('/users', inputValues)
-            const data = await res.json()
-            if (!data.status) return notify({ message: data.message, type: 'error' })
-            setAuthenticated(true)
-            setUser(data.user)
-            localStorage.setItem('email', data.user.email)
-            document.cookie = `access_token=${data.access_token}`
-            notify({ message: data.message, type: 'info' })
-            router.push('/verifyEmail')
+            notify({message:'working on it', type:'info'})
         } catch (error: any) {
             notify({ message: error.message, type: 'error' })
         } finally {

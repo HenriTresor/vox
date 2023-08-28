@@ -1,4 +1,4 @@
-import getCookie from "./getCookie";
+import { getSession } from "next-auth/react";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 const api = {
@@ -13,8 +13,8 @@ const api = {
       });
     },
     GET: async (path: string) => {
-      const token = getCookie("access_token");
-      console.log(token);
+      const session = await getSession();
+      const token = session?.user?.email
       return fetch(`${BASE_URL}${path}`, {
         method: "GET",
         headers: {

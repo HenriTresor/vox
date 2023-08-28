@@ -3,7 +3,7 @@ import './globals.css'
 import type { Metadata } from 'next'
 import NotifyContextProvider from '@/context/NotifyContext'
 import AuthContextProvider from '@/context/AuthContext'
-import api from '@/lib/api'
+import { getServerSession } from 'next-auth'
 
 export const metadata: Metadata = {
   title: 'Vox - Team management and collaboration system',
@@ -16,14 +16,15 @@ export default async function RootLayout({
   children: React.ReactNode
 }) {
 
+  const session = await getServerSession()
   return (
     <html lang="en">
       <body>
-        <NotifyContextProvider>
-          <AuthContextProvider>
+        <AuthContextProvider session={session}>
+          <NotifyContextProvider>
             {children}
-          </AuthContextProvider>
-        </NotifyContextProvider>
+          </NotifyContextProvider>
+        </AuthContextProvider>
       </body>
     </html>
   )

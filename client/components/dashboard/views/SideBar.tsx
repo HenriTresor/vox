@@ -3,7 +3,6 @@ import { Button } from '@/components/ui/button'
 import { Menu, PlusCircleIcon } from 'lucide-react'
 import React from 'react'
 import Person from './Person'
-import { User } from '@/context/AuthContext'
 import Channel from './Channel'
 
 type Props = {}

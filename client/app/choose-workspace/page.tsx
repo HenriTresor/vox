@@ -5,7 +5,6 @@ import NavBar from '@/components/views/LandingPage/NavBar'
 import api from '@/lib/api'
 import React, { useState, useEffect, useContext } from 'react'
 import { NotifyContext } from '@/context/NotifyContext'
-import { AuthContext } from '@/context/AuthContext'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import Workspace from '@/components/Workspace'
@@ -27,19 +26,15 @@ export type WorkspaceTypes = {
 }
 
 function Page({ }: Props) {
-  const { authenticated, user } = useContext(AuthContext)
   const { notify } = useContext(NotifyContext)
   const router = useRouter()
   const [workspaces, setWorkspaces] = useState([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    !localStorage.getItem('email') && router.push('/login')
-  }, [])
-  useEffect(() => {
     const getWorkspaces = async () => {
       try {
-        const res = await api.server.GET(`/workspaces/${user?._id}`)
+        const res = await api.server.GET(`/workspaces/`)
         const data = await res.json()
         if (!data.status) return notify({ message: data.message, type: 'info' })
         setWorkspaces(data.workspaces)
@@ -49,10 +44,8 @@ function Page({ }: Props) {
         setLoading(false)
       }
     }
-    if (user) {
-      getWorkspaces()
-    }
-  }, [authenticated])
+
+  }, [])
   return (
     <>
       <NavBar />
@@ -72,7 +65,7 @@ function Page({ }: Props) {
               : (
                 <>
                   {workspaces.map((workspace: WorkspaceTypes) => (
-                    <Workspace {...workspace} key={workspace._id} action={ ()=>router.push(`/workspaces/${workspace.slug}`)} />
+                    <Workspace {...workspace} key={workspace._id} action={() => router.push(`/workspaces/${workspace.slug}`)} />
                   ))}
                   <Button onClick={() => router.push('/create-workspace')}>Create workspace</Button>
                 </>

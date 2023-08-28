@@ -8,14 +8,12 @@ import { NotifyContext } from '@/context/NotifyContext'
 import api from '@/lib/api'
 import { useRouter } from 'next/navigation'
 import { Label } from '@/components/ui/label'
-import { AuthContext } from '@/context/AuthContext'
 
 type Props = {}
 
 function Page({ }: Props) {
 
     const router = useRouter()
-    const { user } = useContext(AuthContext)    
     const { notify } = useContext(NotifyContext)
     const [values, setValues] = useState({
         name: '',
@@ -25,7 +23,7 @@ function Page({ }: Props) {
     const createWorkspace = async () => {
         try {
             const res = await api.server.POST('/workspaces', {
-                ...values, admin: user?._id
+                ...values
             })
             const data = await res.json()
             if (!data.status) return notify({ message: data.message, type: 'error' })
@@ -64,7 +62,7 @@ function Page({ }: Props) {
                             placeholder='enter your organisation category (default: uncategorized)'
                         />
                     </div>
-                    <Button onClick={()=>router.push('/choose-workspace')} variant={'outline'} className='mr-5'>Choose workspace</Button>
+                    <Button onClick={() => router.push('/choose-workspace')} variant={'outline'} className='mr-5'>Choose workspace</Button>
                     <Button onClick={createWorkspace}>Create workspace</Button>
                 </div>
             </div>
