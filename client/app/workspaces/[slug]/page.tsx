@@ -18,9 +18,6 @@ function Page({ }: Props) {
     const [loading, setLoading] = useState(true)
     const router = useRouter()
     useEffect(() => {
-        !localStorage.getItem('email') && router.push('/login')
-    }, [])
-    useEffect(() => {
         const getWorkspace = async () => {
             try {
                 const res = await api.server.GET(`/workspaces/single/${slug}`)

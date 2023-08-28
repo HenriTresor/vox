@@ -18,10 +18,13 @@ export const login = async (req, res, next) => {
         res.status(200).json(
             {
                 status: true,
-                access_token: token,
                 message: 'login was successfully',
-                user: _.pick(user,
-                    ['_id', 'email', 'firstName', 'lastName', 'createdAt', 'updatedAt', 'verifiedAccount', 'verificationCode'])
+                user: {
+                    ...(_.pick(user,
+                        ['_id', 'email', 'firstName', 'lastName', 'createdAt', 'updatedAt', 'verifiedAccount', 'verificationCode'])),
+                        access_token: token,
+                    
+                }
             }
         )
     } catch (error) {

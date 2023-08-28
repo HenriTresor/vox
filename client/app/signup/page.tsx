@@ -27,10 +27,11 @@ function Page({ }: Props) {
     }, [])
     const [loading, setLoading] = React.useState(false)
     const handleChange = (e: any) => setInputValues(prev => ({ ...prev, [e.target.name]: e.target.value }))
-    const handleSubmit = async () => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
         setLoading(true)
         try {
-            notify({message:'working on it', type:'info'})
+            notify({ message: 'working on it', type: 'info' })
         } catch (error: any) {
             notify({ message: error.message, type: 'error' })
         } finally {
@@ -48,32 +49,34 @@ function Page({ }: Props) {
                     <div className='flex flex-col items-start w-full justify-between'>
                         <h1 className='text-[1.5rem] mt-5 mb-5 font-bold'>Create account</h1>
                         <p className='mb-5 text-neutral-500'>Fill in the following inputs to create your account!</p>
-                        <div className="input-container">
-                            <Label htmlFor='email'>Email</Label>
-                            <Input onChange={(e) => handleChange(e)} type='email' id='email' placeholder='Enter your email' name='email' />
-                        </div>
-                        <div className='flex items-center w-full'>
+                        <form action="" onSubmit={(e) => handleSubmit(e)}>
                             <div className="input-container">
-                                <Label htmlFor='firstName'>first Name</Label>
-                                <Input onChange={(e) => handleChange(e)} type='firstName' id='firstName' placeholder='Enter your first Name' name='firstName' />
+                                <Label htmlFor='email'>Email</Label>
+                                <Input onChange={(e) => handleChange(e)} type='email' id='email' placeholder='Enter your email' name='email' />
                             </div>
-                            <div className="input-container">
-                                <Label htmlFor='lastName'>last Name</Label>
-                                <Input onChange={(e) => handleChange(e)} type='lastName' id='lastName' placeholder='Enter your last Name' name='lastName' />
+                            <div className='flex items-center w-full'>
+                                <div className="input-container">
+                                    <Label htmlFor='firstName'>first Name</Label>
+                                    <Input onChange={(e) => handleChange(e)} type='firstName' id='firstName' placeholder='Enter your first Name' name='firstName' />
+                                </div>
+                                <div className="input-container">
+                                    <Label htmlFor='lastName'>last Name</Label>
+                                    <Input onChange={(e) => handleChange(e)} type='lastName' id='lastName' placeholder='Enter your last Name' name='lastName' />
+                                </div>
                             </div>
-                        </div>
-                        <div className='flex items-center w-full'>
-                            <div className="input-container">
-                                <Label htmlFor='password'>password</Label>
-                                <Input onChange={(e) => handleChange(e)} type='password' id='password' placeholder='create password' name='password' />
+                            <div className='flex items-center w-full'>
+                                <div className="input-container">
+                                    <Label htmlFor='password'>password</Label>
+                                    <Input onChange={(e) => handleChange(e)} type='password' id='password' placeholder='create password' name='password' />
+                                </div>
+                                <div className="input-container">
+                                    <Label htmlFor='confPassword'>confirm password</Label>
+                                    <Input onChange={(e) => handleChange(e)} type='password' id='confPassword' placeholder='confirm password' name='passwordConfirmation' />
+                                </div>
                             </div>
-                            <div className="input-container">
-                                <Label htmlFor='confPassword'>confirm password</Label>
-                                <Input onChange={(e) => handleChange(e)} type='password' id='confPassword' placeholder='confirm password' name='passwordConfirmation' />
-                            </div>
-                        </div>
 
-                        <Button type='submit' onClick={handleSubmit} disabled={loading}>Create account</Button>
+                            <Button type='submit' disabled={loading}>Create account</Button>
+                        </form>
                         <p className='mt-5 text-[.9rem] flex gap-1'>
                             Already have an account?
                             <Link href='/login' className='text-blue-500'>

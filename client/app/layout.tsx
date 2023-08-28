@@ -3,6 +3,7 @@ import './globals.css'
 import type { Metadata } from 'next'
 import NotifyContextProvider from '@/context/NotifyContext'
 import AuthContextProvider from '@/context/AuthContext'
+import { getSession } from 'next-auth/react'
 import { getServerSession } from 'next-auth'
 
 export const metadata: Metadata = {
@@ -17,6 +18,7 @@ export default async function RootLayout({
 }) {
 
   const session = await getServerSession()
+
   return (
     <html lang="en">
       <body>

@@ -1,5 +1,5 @@
 'use client'
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import NavItem from './NavItem'
 import { Button } from '@/components/ui/button'
 import Logo from '@/components/reusables/logo'
@@ -8,8 +8,8 @@ import MenuBar from './Menu'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Menu as SmallMenu } from '@headlessui/react'
-import { signOut, useSession } from 'next-auth/react'
-
+import { getSession, signOut, useSession } from 'next-auth/react'
+import { Session } from 'next-auth'
 
 type Props = {}
 
@@ -24,7 +24,6 @@ function NavBar({ }: Props) {
     const router = useRouter()
     const [isMenuOpen, setIsMenuOpen] = React.useState(false)
     const session = useSession()
-
 
     return (
         <div className='w-full h-auto p-3 flex justify-between items-center sticky top-0 z-10 bg-white'>
@@ -93,7 +92,6 @@ function NavBar({ }: Props) {
                                             className={`p-2 text-left capitalize ${active && 'bg-red-500'} flex items-center gap-3`}
                                             onClick={() => {
                                                 signOut()
-                                                location.assign('/login')
                                             }}
                                         >
                                             <LogOutIcon />
@@ -107,7 +105,7 @@ function NavBar({ }: Props) {
                     )
             }
 
-        </div>
+        </div >
     )
 }
 

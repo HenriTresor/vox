@@ -8,6 +8,7 @@ import { NotifyContext } from '@/context/NotifyContext'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import Workspace from '@/components/Workspace'
+import { getSession, useSession } from 'next-auth/react'
 
 type Props = {}
 
@@ -29,12 +30,14 @@ function Page({ }: Props) {
   const { notify } = useContext(NotifyContext)
   const router = useRouter()
   const [workspaces, setWorkspaces] = useState([])
+  const session = useSession()
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const getWorkspaces = async () => {
       try {
-        const res = await api.server.GET(`/workspaces/`)
+        const userSession = await getSession()
+        const res = await api.server.GET(`/workspaces/${userSession?.user._id}`)
         const data = await res.json()
         if (!data.status) return notify({ message: data.message, type: 'info' })
         setWorkspaces(data.workspaces)
@@ -44,8 +47,8 @@ function Page({ }: Props) {
         setLoading(false)
       }
     }
-
-  }, [])
+    session.data?.user?._id && getWorkspaces()
+  }, [session.data?.user])
   return (
     <>
       <NavBar />

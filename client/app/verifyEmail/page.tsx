@@ -22,7 +22,7 @@ function Page({ }: Props) {
     try {
 
       const res = await api.server.POST('/users/accounts/verify', {
-        code: inputRef.current?.value,
+        code: inputRef.current?.value,  
         email: localStorage.getItem('email')
       })
 
