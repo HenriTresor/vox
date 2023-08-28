@@ -38,7 +38,7 @@ function Page({ }: Props) {
         </div>
     )
     return (
-        <div className='w-full min-h-screen border flex justify-start items-start p-0 relative left-0 top-0'>
+        <div className='w-full h-[100dvh] border flex justify-start items-start p-0'>
             <SideBar
                 {...workspace}
             />

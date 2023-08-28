@@ -6,9 +6,9 @@ import Loading from '@/components/reusables/loading'
 import { Button } from '@/components/ui/button'
 import Footer from '@/components/views/LandingPage/Footer'
 import NavBar from '@/components/views/LandingPage/NavBar'
-import { AuthContext } from '@/context/AuthContext'
 import { NotifyContext } from '@/context/NotifyContext'
 import api from '@/lib/api'
+import { useSession } from 'next-auth/react'
 import { useParams, useRouter } from 'next/navigation'
 import React, { useContext, useEffect, useState } from 'react'
 
@@ -18,8 +18,8 @@ function Page({ }: Props) {
   const { slug, inviteCode } = useParams()
   const [workspace, setWorkspace] = useState<WorkspaceTypes | any>(null)
   const { notify } = useContext(NotifyContext)
-  const { user } = useContext(AuthContext)
   const [isInviteCodeCorrect, setIsInviteCodeCorrect] = useState(false)
+  const session = useSession()
   const router = useRouter()
   useEffect(() => {
     !localStorage.getItem('email') && router.push('/login')
@@ -63,7 +63,7 @@ function Page({ }: Props) {
     try {
       const res = await api.server.POST(`/workspaces/invite/accept`, {
         slug,
-        recipientId: user?._id
+        recipientId: session.data?.user?._id
       })
 
       const data = await res.json()
