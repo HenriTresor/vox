@@ -29,7 +29,7 @@ function SideBar({ name, members, channels }: WorkspaceTypes) {
         setDialogProps({
             title: "Invite your team members",
             description: "Input email address of your team member to send invite.",
-            content: <NewMemberModal sendInvite={sendInvite} />,
+            content: <NewMemberModal  />,
         })
     }
     return (

@@ -96,12 +96,16 @@ export const getSingleWorkspace = async (req, res, next) => {
 export const sendInviteEmail = async (req, res, next) => {
     try {
         const { email, slug } = req.body
-        if (!email || !slug) return next(errorResponse(400, 'recipient email and workspace slug are all required'))
+        if (!email || !slug) return next(errorResponse(400, 'recipient email is required'))
         let user = await checkUserWithEmail(email)
         if (!user) return next(errorResponse(404, `user with ${email} is not registered`))
 
-        let workspace = await Workspace.findOne({ slug });
+        let workspace = await Workspace.findOne({ slug }).populate('members')
         if (!workspace) return next(errorResponse(404, `${slug} was not found`))
+
+        let isUserAlreadyMember = workspace.members.find(user => String(user?.email) === String(email))
+
+        if (isUserAlreadyMember) return next(errorResponse(409, `${email} is already a member`))
 
         const emailRes = await sendEmail(email, 'Invite to join workspace', `you were invited to join ${workspace.name}. Click this link to join ${workspace.inviteLink}`)
         if (emailRes === true) {
@@ -145,7 +149,7 @@ export const acceptInvite = async (req, res, next) => {
 
         let user = await checkUserWithId(recipientId)
         if (!user) return next(errorResponse(404, 'user was not found'))
-        let workspace = await Workspace.findOne({ slug })
+        let workspace = await Workspace.findOne({ slug }).populate('admin')
         if (!workspace) return next(errorResponse(404, 'workspace not found'))
 
         if (workspace.members.includes(recipientId)) return next(errorResponse(409, 'user is already a member'))
@@ -155,6 +159,7 @@ export const acceptInvite = async (req, res, next) => {
                 'channels[0].members': recipientId
             }
         })
+        const emailRes = await sendEmail(workspace.admin.email, `invitation accepted`, `${user.firstName} ${user.lastName} accepted your invitation to join ${workspace.name}`)
         res.status(200).json({
             status: true,
             message: 'invite accepted. You are now a member'

@@ -8,7 +8,7 @@ import Footer from '@/components/views/LandingPage/Footer'
 import NavBar from '@/components/views/LandingPage/NavBar'
 import { NotifyContext } from '@/context/NotifyContext'
 import api from '@/lib/api'
-import { useSession } from 'next-auth/react'
+import { getSession, useSession } from 'next-auth/react'
 import { useParams, useRouter } from 'next/navigation'
 import React, { useContext, useEffect, useState } from 'react'
 
@@ -21,9 +21,7 @@ function Page({ }: Props) {
   const [isInviteCodeCorrect, setIsInviteCodeCorrect] = useState(false)
   const session = useSession()
   const router = useRouter()
-  useEffect(() => {
-    !localStorage.getItem('email') && router.push('/login')
-  }, [])
+
   useEffect(() => {
     const getWorkspace = async () => {
       try {
@@ -61,9 +59,10 @@ function Page({ }: Props) {
 
   const acceptInvite = async () => {
     try {
+      const session = await getSession()
       const res = await api.server.POST(`/workspaces/invite/accept`, {
         slug,
-        recipientId: session.data?.user?._id
+        recipientId: session?.user?._id
       })
 
       const data = await res.json()

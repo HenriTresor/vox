@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.input-container{
+    @apply flex gap-1 p-3 flex-col
+}

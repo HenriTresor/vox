@@ -8,6 +8,7 @@ import { NotifyContext } from '@/context/NotifyContext'
 import api from '@/lib/api'
 import { useRouter } from 'next/navigation'
 import { Label } from '@/components/ui/label'
+import { getSession } from 'next-auth/react'
 
 type Props = {}
 
@@ -22,8 +23,10 @@ function Page({ }: Props) {
     const handleChange = (e: any) => setValues(prev => ({ ...prev, [e.target.name]: e.target.value }))
     const createWorkspace = async () => {
         try {
+            const session = await getSession()
             const res = await api.server.POST('/workspaces', {
-                ...values
+                ...values,
+                admin: session?.user._id
             })
             const data = await res.json()
             if (!data.status) return notify({ message: data.message, type: 'error' })

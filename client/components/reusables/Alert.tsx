@@ -21,6 +21,7 @@ function Alert({ isAlertOpen, setAlertOpen, type, message }: Props) {
             leave="transition-opacity duration-150"
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
+            
         >
             <div
                 className='fixed top-5 right-5 bg-white shadow-2xl border w-[20dvw] flex flex-col gap-2 p-2 rounded-md z-50'
