@@ -9,22 +9,10 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import Workspace from '@/components/Workspace'
 import { getSession, useSession } from 'next-auth/react'
+import { User } from '@/types/next-auth'
+import { WorkspaceTypes } from '@/types/app'
 
 type Props = {}
-
-export type WorkspaceTypes = {
-  admin: string;
-  members: [];
-  name: string;
-  category: string,
-  inviteLink: string,
-  createdAt: Date,
-  updatedAt: Date,
-  avatar: string,
-  _id: string,
-  channels?: [],
-  slug: string
-}
 
 function Page({ }: Props) {
   const { notify } = useContext(NotifyContext)
