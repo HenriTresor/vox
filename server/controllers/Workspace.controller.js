@@ -4,6 +4,7 @@ import errorResponse from '../utils/errorResponse.js'
 import crypto from 'crypto'
 import sendEmail from "../utils/emailTransporter.js";
 import { checkUserWithEmail, checkUserWithId } from "../utils/checkUser.js";
+import { channelValidObject } from "../validators/channels.joi.js";
 
 const generateInviteLink = (name) => {
     const inviteCode = crypto.randomBytes(10).toString('hex')
@@ -169,3 +170,29 @@ export const acceptInvite = async (req, res, next) => {
         next(errorResponse(500, 'something went wrong'))
     }
 }
+
+export const createNewChannel = async (req, res, next) => {
+    try {
+        const { name, form, creator, workspaceId } = req.body
+
+        const { error, value } = channelValidObject.validate({ ...req.body })
+        if (error) return next(errorResponse(400, error.message))
+
+        let newChannel = await Workspace.findByIdAndUpdate(workspaceId, {
+            $push: {
+                channels: { name, form, creator }
+            }
+        })
+
+        if (!newChannel.isModified) throw new Error("unable to create new channel")
+
+        res.status(201).json({
+            status: true,
+            message: 'new channel added successfully'
+        })
+    } catch (error) {
+        console.log('[create-channel]', error.message)
+        next(errorResponse(500, 'something went wrong'))
+    }
+}
+export const addMembersToChannel = async () => { }
