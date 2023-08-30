@@ -1,5 +1,4 @@
 'use client'
-import { WorkspaceTypes } from '@/app/choose-workspace/page'
 import { Button } from '@/components/ui/button'
 import { Menu, PlusCircle, PlusCircleIcon } from 'lucide-react'
 import React, { useContext } from 'react'
@@ -12,6 +11,8 @@ import api from '@/lib/api'
 import { useParams } from 'next/navigation'
 import { useToast } from '@/components/ui/use-toast'
 import { NotifyContext } from '@/context/NotifyContext'
+import NewChannel from '@/components/modals/NewChannel'
+import { WorkspaceTypes } from '@/types/app'
 
 
 type Props = {}
@@ -24,12 +25,12 @@ function SideBar({ name, members, channels }: WorkspaceTypes) {
     const { notify } = React.useContext(NotifyContext)
 
 
-    const openModal = () => {
+    const openModal = (children: React.ReactNode, title: string, description: string) => {
         setIsOpen(true)
         setDialogProps({
-            title: "Invite your team members",
-            description: "Input email address of your team member to send invite.",
-            content: <NewMemberModal  />,
+            title: title,
+            description,
+            content: children,
         })
     }
     return (
@@ -38,7 +39,16 @@ function SideBar({ name, members, channels }: WorkspaceTypes) {
         >
             <div className='flex border-b p-2 justify-between items-center'>
                 <h1 className='uppercase font-bold'>{name}</h1>
-                <Button onClick={() => openModal()}><PlusCircle /></Button>
+                <Button onClick={() => openModal(<NewMemberModal />,
+                    'Invite your team members',
+                    'Input email address of your team member to send invite.')}><PlusCircle /></Button>
+            </div>
+
+            <div >
+                <div className='w-full flex justify-between p-2 items-center'>
+                    <h1>Channels</h1>
+                <Button onClick={() => openModal(<NewChannel />, 'Create new channel', 'fill in the information to create a new channel.')}><PlusCircle /></Button>
+                </div>
             </div>
         </div>
     )
