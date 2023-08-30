@@ -22,13 +22,13 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body>
-        <AuthContextProvider session={session}>
-          <DialogContextProvider>
-            <NotifyContextProvider>
+        <NotifyContextProvider>
+          <AuthContextProvider session={session}>
+            <DialogContextProvider>
               {children}
-            </NotifyContextProvider>
-          </DialogContextProvider>
-        </AuthContextProvider>
+            </DialogContextProvider>
+          </AuthContextProvider>
+        </NotifyContextProvider>
       </body>
     </html>
   )

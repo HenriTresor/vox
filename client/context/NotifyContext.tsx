@@ -11,7 +11,7 @@ type defaultValues = {
 }
 
 type AlertTypes = {
-    type: 'error' | 'success' | 'info' ,
+    type: 'error' | 'success' | 'info',
     message: string
 }
 
@@ -28,11 +28,11 @@ function NotifyContextProvider({ children }: Props) {
     })
 
     const notify = ({ type, message }: AlertTypes): void => {
+        setAlertOpen(true)
         setAlert({
             type: type,
             message: message
         })
-        setAlertOpen(true)
     }
 
     const value = {
@@ -41,14 +41,17 @@ function NotifyContextProvider({ children }: Props) {
     return (
         <NotifyContext.Provider value={value}>
             {children}
-            {isAlertOpen && (
-                <Alert
-                    isAlertOpen={isAlertOpen}
-                    setAlertOpen={setAlertOpen}
-                    type={alert.type}
-                    message={alert.message}
-                />
-           )}
+            {
+                isAlertOpen && (
+                    <Alert
+                        isAlertOpen={isAlertOpen}
+                        setAlertOpen={setAlertOpen}
+                        type={alert.type}
+                        message={alert.message}
+                    />
+                )
+            }
+
         </NotifyContext.Provider>
     )
 }

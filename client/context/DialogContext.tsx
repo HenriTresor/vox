@@ -10,7 +10,6 @@ type dialogProps = {
     content: React.ReactNode,
     title: string;
     description: string;
-    nextAction: (vl: any) => void;
 }
 
 type defaultTypes = {
@@ -31,7 +30,6 @@ function DialogContextProvider({ children }: Props) {
         content: <></>,
         title: '',
         description: '',
-        nextAction: () => { },
     })
 
     const [isOpen, setIsOpen] = React.useState(false)

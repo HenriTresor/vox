@@ -13,17 +13,17 @@ type Props = {
 
 function Alert({ isAlertOpen, setAlertOpen, type, message }: Props) {
     return (
-        // <Transition
-        //     show
-        //     enter="transition-opacity duration-75"
-        //     enterFrom="opacity-0"
-        //     enterTo="opacity-100"
-        //     leave="transition-opacity duration-150"
-        //     leaveFrom="opacity-100"
-        //     leaveTo="opacity-0"
-        // >
+        <Transition
+            show={isAlertOpen}
+            enter="transition-opacity duration-7"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="transition-opacity duration-150"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+        >
             <div
-                className='fixed top-5 right-5 bg-white shadow-2xl border w-[20dvw] flex flex-col gap-2 p-2 rounded-md z-20'
+                className='fixed top-5 right-5 bg-white shadow-2xl border w-[20dvw] flex flex-col gap-2 p-2 rounded-md z-50'
             >
                 <div className='flex w-full justify-between items-center'>
                     <div className='flex items-center gap-3'>
@@ -50,7 +50,7 @@ function Alert({ isAlertOpen, setAlertOpen, type, message }: Props) {
                 </div>
                 <p className='ml-5 text-neutral-500'>{message}</p>
             </div>
-    //    </Transition>
+     </Transition>
     )
 }
 
