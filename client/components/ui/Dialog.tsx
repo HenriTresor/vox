@@ -1,9 +1,9 @@
+import { Fragment } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import { Fragment, useState } from 'react'
 
 type Props = {
     title: string;
-    description: string;
+    description?: string;
     nextAction?: (vl: any) => void;
     setIsOpen: (vl: boolean) => void;
     isOpen: boolean;

@@ -3,7 +3,7 @@ import workspaceValidObject from "../validators/workspace.joi.js";
 import errorResponse from '../utils/errorResponse.js'
 import crypto from 'crypto'
 import sendEmail from "../utils/emailTransporter.js";
-import { checkUserWithId } from "../utils/checkUser.js";
+import { checkUserWithEmail, checkUserWithId } from "../utils/checkUser.js";
 
 const generateInviteLink = (name) => {
     const inviteCode = crypto.randomBytes(10).toString('hex')
@@ -89,6 +89,28 @@ export const getSingleWorkspace = async (req, res, next) => {
         })
     } catch (error) {
         console.log('[getting-workspace]', error.message)
+        next(errorResponse(500, 'something went wrong'))
+    }
+}
+
+export const sendInviteEmail = async (req, res, next) => {
+    try {
+        const { email, slug } = req.body
+        if (!email || !slug) return next(errorResponse(400, 'recipient email and workspace slug are all required'))
+        let user = await checkUserWithEmail(email)
+        if (!user) return next(errorResponse(404, `user with ${email} is not registered`))
+
+        let workspace = await Workspace.findOne({ slug });
+        if (!workspace) return next(errorResponse(404, `${slug} was not found`))
+
+        const emailRes = await sendEmail(email, 'Invite to join workspace', `you were invited to join ${workspace.name}. Click this link to join ${workspace.inviteLink}`)
+        if (emailRes === true) {
+            return res.status(200).json({ status: true, message: "Invite link was sent successfully" })
+
+        }
+        throw new Error('Could not send invite link. Try again later')
+    } catch (error) {
+        console.log('[sending-invite-email]', error.message)
         next(errorResponse(500, 'something went wrong'))
     }
 }

@@ -1,3 +1,4 @@
+'use client'
 import Modal from '@/components/ui/Dialog';
 import React from 'react'
 
@@ -5,23 +6,20 @@ type Props = {
     children: React.ReactNode
 }
 
+type dialogProps = {
+    content: React.ReactNode,
+    title: string;
+    description: string;
+    nextAction: (vl: any) => void;
+}
+
 type defaultTypes = {
-    dialogProps: {
-        content: React.ReactNode,
-        title: string;
-        description: string;
-        nextAction: (vl: any) => void;
-    },
+    setDialogProps: (vl: dialogProps) => void;
     setIsOpen: (val: boolean) => void;
 }
 
 const defaultValues = {
-    dialogProps: {
-        content: <></>,
-        title: '',
-        description: '',
-        nextAction: () => { },
-    },
+    setDialogProps: (vl: dialogProps) => { },
     setIsOpen: (vl: boolean) => { }
 }
 
@@ -29,7 +27,7 @@ export const DialogContext = React.createContext<defaultTypes>(defaultValues)
 
 function DialogContextProvider({ children }: Props) {
 
-    const [dialogProps, setDialogProps] = React.useState({
+    const [dialogProps, setDialogProps] = React.useState<dialogProps>({
         content: <></>,
         title: '',
         description: '',
@@ -40,7 +38,6 @@ function DialogContextProvider({ children }: Props) {
 
 
     const value = {
-        dialogProps,
         setDialogProps,
         setIsOpen
     }

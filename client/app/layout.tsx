@@ -1,10 +1,10 @@
-import { ToastContainer } from 'react-toastify'
 import './globals.css'
 import type { Metadata } from 'next'
 import NotifyContextProvider from '@/context/NotifyContext'
 import AuthContextProvider from '@/context/AuthContext'
 import { getSession } from 'next-auth/react'
 import { getServerSession } from 'next-auth'
+import DialogContextProvider from '@/context/DialogContext'
 
 export const metadata: Metadata = {
   title: 'Vox - Team management and collaboration system',
@@ -23,9 +23,11 @@ export default async function RootLayout({
     <html lang="en">
       <body>
         <AuthContextProvider session={session}>
-          <NotifyContextProvider>
-            {children}
-          </NotifyContextProvider>
+          <DialogContextProvider>
+            <NotifyContextProvider>
+              {children}
+            </NotifyContextProvider>
+          </DialogContextProvider>
         </AuthContextProvider>
       </body>
     </html>
