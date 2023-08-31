@@ -13,29 +13,8 @@ const WorkspaceSchema = new Schema(
         },
         channels: [
             {
-                name: { type: String, required: 'true' },
-                members: [
-                    {
-                        type: Schema.Types.ObjectId,
-                        ref: 'user'
-                    }
-                ],
-                form: {
-                    type: String,
-                    required: true,
-                    enum: ['private', 'public'],
-                    default: 'public'
-                },
-                creator: { type: Schema.Types.ObjectId, ref: 'users' },
-                messages: [
-                    {
-                        type: String,
-                        sender: { type: Schema.Types.ObjectId, ref: 'users' },
-                        receiver: { type: Schema.Types.ObjectId, ref: 'users' },
-                        message: { type: String },
-                        sendOn: { type: Date, default: Date.now() }
-                    }
-                ]
+                type: Schema.Types.ObjectId,
+                ref: 'channels'
             }
         ],
         admin: { type: Schema.Types.ObjectId, ref: 'users' },
