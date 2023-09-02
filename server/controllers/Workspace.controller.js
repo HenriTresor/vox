@@ -154,12 +154,6 @@ export const acceptInvite = async (req, res, next) => {
         if (!workspace) return next(errorResponse(404, 'workspace not found'))
 
         if (workspace.members.includes(recipientId)) return next(errorResponse(409, 'user is already a member'))
-        await Workspace.findOneAndUpdate({ slug }, {
-            $push: {
-                members: recipientId,
-                'channels[0].members': recipientId
-            }
-        })
         const emailRes = await sendEmail(workspace.admin.email, `invitation accepted`, `${user.firstName} ${user.lastName} accepted your invitation to join ${workspace.name}`)
         res.status(200).json({
             status: true,

@@ -35,13 +35,14 @@ function SideBar({ name, members, channels }: WorkspaceTypes) {
     }
     return (
         <div
-            className='sm:w-1/5 h-[100dvh] bg-neutral-900 text-white absolute sm:block w-1/2 overflow-scroll'
+            className=' text-black  overflow-scroll w-1/5 h-full border-r p-2'
         >
-            <div className='flex border-b p-2 justify-between items-center'>
-                <h1 className='uppercase font-bold'>{name}</h1>
+            <div className='flex border-b p-2 justify-between items-center '>
                 <Button onClick={() => openModal(<NewMemberModal />,
                     'Invite your team members',
-                    'Input email address of your team member to send invite.')}><PlusCircle /></Button>
+                    'Input email address of your team member to send invite.')}
+                className='w-full flex justify-evenly font-bold items-center'
+                ><PlusCircle /> Add people</Button>
             </div>
 
             <div >

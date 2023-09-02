@@ -6,6 +6,6 @@ export const config = {
     "/create-workspace",
     "/workspaces",
     "/workspaces/:path*",
-    "/((?!api|_next/static|_next/image|favicon.ico).*)",
+    // "/((?!api|_next/static|_next/image|favicon.ico).*)",
   ],
 };

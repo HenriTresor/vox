@@ -14,15 +14,15 @@ export type Channel = {
   form: "private" | "public";
 };
 export type WorkspaceTypes = {
-  admin: string;
-  members: [];
-  name: string;
-  category: string;
-  inviteLink: string;
-  createdAt: Date;
-  updatedAt: Date;
-  avatar: string;
-  _id: string;
+  admin?: string;
+  members?: [];
+  name?: string;
+  category?: string;
+  inviteLink?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+  avatar?: string;
+  _id?: string;
   channels?: [];
-  slug: string;
+  slug?: string;
 };

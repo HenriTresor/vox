@@ -4,8 +4,8 @@ type Props = {}
 
 function Body({}: Props) {
   return (
-      <div className=' flex-grow'>
-          
+      <div className=' flex-grow w-full'>
+          ff
     </div>
   )
 }
