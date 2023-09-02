@@ -9,6 +9,8 @@ import SideBar from '@/components/dashboard/views/SideBar'
 import Body from '@/components/dashboard/views/Body'
 import { WorkspaceTypes } from '@/types/app'
 import Header from '@/components/dashboard/views/Header'
+import { getServerSession } from 'next-auth'
+import { User } from '@/types/next-auth'
 
 type Props = {
     children: React.ReactNode
@@ -20,6 +22,7 @@ function WorkspaceLayout({ children }: Props) {
     const { notify } = useContext(NotifyContext)
     const [workspace, setWorkspace] = useState<WorkspaceTypes>({})
     const [loading, setLoading] = useState(true)
+    const [user, setUser] = useState<User | null | undefined>(null)
     const router = useRouter()
     useEffect(() => {
         const getWorkspace = async () => {
