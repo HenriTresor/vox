@@ -40,7 +40,7 @@ function WorkspaceLayout({ children }: Props) {
         getWorkspace()
     }, [])
     return (
-        <div className='w-full h-[93dvh]'>
+        <div className='w-full h-[90dvh]'>
             <Header {...workspace} />
             <div className='w-full border flex h-full '>
                 <SideBar

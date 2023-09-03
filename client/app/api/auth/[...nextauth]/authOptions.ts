@@ -2,6 +2,7 @@ import authenticate from "@/lib/authenticate";
 import { NextAuthOptions, User } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { JWT } from "next-auth/jwt";
+import GoogleProvider from "next-auth/providers/google";
 
 export let authOptions: NextAuthOptions = {
   providers: [
@@ -25,6 +26,10 @@ export let authOptions: NextAuthOptions = {
         }
         return { ...data.user, apiToken: data.token };
       },
+    }),
+    GoogleProvider({
+      clientId: `${process.env.GOOGLE_CLIENT_ID}`,
+      clientSecret: `${process.env.GOOGLE_CLIENT_SECRET}`,
     }),
   ],
 
