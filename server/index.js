@@ -5,15 +5,18 @@ import { config } from 'dotenv'
 import errorResponse from './utils/errorResponse.js'
 import sendEmail from './utils/emailTransporter.js'
 import cors from 'cors'
+import { Server } from 'socket.io'
+import http from 'http'
 
 import userRouter from './routes/user.route.js'
 import authRouter from './routes/auth.route.js'
 import workspaceRouter from './routes/workspace.route.js'
 
+
 config()
 
 const app = express()
-
+const server = http.createServer(app)
 app.use(express.json())
 app.use(cors({
     origin: '*',
@@ -24,7 +27,7 @@ app.use(cors({
 dbConfig(process.env.MONGO_URL || 'mongodb://127.0.0.1:27017/vox').then((conn) => {
     console.log('connected to db')
 }).then(() => {
-    const server = app.listen(process.env.PORT || 8080, () => {
+    server.listen(process.env.PORT || 8080, () => {
         console.log('listening after connecting to db')
     })
 })
@@ -42,3 +45,18 @@ app.all('*', (req, res, next) => {
 
 
 app.use(errorHandler)
+
+const io = new Server(server, {
+    cors: {
+        origin: '*',
+        credentials: true
+    }
+})
+
+io.on('connection', socket => {
+    console.log('new socket', socket.id)
+
+    socket.on('disconnect', () => {
+        console.log('disconnect', socket.id)
+    })
+})
