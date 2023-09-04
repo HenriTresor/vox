@@ -75,7 +75,6 @@ export const sendVerificationCode = async (req, res, next) => {
             type === 'verification' ? 'verify email' : 'reset your password',
             type === 'verification' ? verifyEmailMessage : passwordResetMessage
         )
-        console.log(emailResponse)
         if (emailResponse === true) {
             return res.status(200).json({
                 status: true, message: 'a code was sent to your email. Check it to continue'

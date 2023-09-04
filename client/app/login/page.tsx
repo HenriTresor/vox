@@ -58,6 +58,18 @@ function Page({ params, searchParams }: Props) {
                     <Logo />
                     <div className='flex flex-col items-start w-full justify-between'>
                         <h1 className='text-[1.5rem] mt-5 mb-5 font-bold'>Sign in</h1>
+                        <div className='w-full p-2 border rounded-md'>
+                            <Button className='w-full text-center font-bold'
+                                onClick={() => {
+                                    setLoading(true)
+                                    signIn('google', {
+                                        redirect: true,
+                                        callbackUrl: '/choose-workspace'
+                                    })
+                                }}
+                                disabled={loading}
+                            >Google</Button>
+                        </div>
                         <p className='mb-5 text-neutral-500'>Fill in the following to login</p>
                         <form className='w-full' onSubmit={(e) => handleSubmit(e)}>
                             <div className="input-container">

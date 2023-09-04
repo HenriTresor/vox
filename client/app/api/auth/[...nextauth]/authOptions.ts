@@ -47,5 +47,12 @@ export let authOptions: NextAuthOptions = {
       session.user = token as any;
       return session;
     },
+    async signIn({ profile, account }) {
+      console.log("profile", profile, "account", account);
+      if (account?.provider === "google") {
+        return true;
+      }
+      return false;
+    },
   },
 };
