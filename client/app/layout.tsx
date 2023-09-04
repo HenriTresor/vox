@@ -5,6 +5,7 @@ import AuthContextProvider from '@/context/AuthContext'
 import { getSession } from 'next-auth/react'
 import { getServerSession } from 'next-auth'
 import DialogContextProvider from '@/context/DialogContext'
+import SocketProvider from '@/context/SocketProvider'
 
 export const metadata: Metadata = {
   title: 'Vox - Team management and collaboration system',
@@ -24,9 +25,11 @@ export default async function RootLayout({
       <body>
         <NotifyContextProvider>
           <AuthContextProvider session={session}>
-            <DialogContextProvider>
-              {children}
-            </DialogContextProvider>
+            <SocketProvider>
+              <DialogContextProvider>
+                {children}
+              </DialogContextProvider>
+            </SocketProvider>
           </AuthContextProvider>
         </NotifyContextProvider>
       </body>
