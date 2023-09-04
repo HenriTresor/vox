@@ -20,7 +20,11 @@ const sideItems = [
     { name: 'Chat Room', href: `chat-room`, icon: <MessageCircle /> }
 ]
 
-type Props = {}
+type Props = {
+
+}
+
+
 
 function SideBar({ name, members, channels }: WorkspaceTypes) {
     const { slug } = useParams()
@@ -29,7 +33,7 @@ function SideBar({ name, members, channels }: WorkspaceTypes) {
     const { toast } = useToast()
     const { notify } = React.useContext(NotifyContext)
 
-    const pathname = usePathname()
+    const pathname = `/workspaces/${slug}`
 
     const openModal = (children: React.ReactNode, title: string, description: string) => {
         setIsOpen(true)

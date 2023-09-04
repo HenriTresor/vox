@@ -1,7 +1,7 @@
 
 'use client'
 import React, { useContext, useEffect, useState } from 'react'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams, usePathname, useRouter } from 'next/navigation'
 import { NotifyContext } from '@/context/NotifyContext'
 import api from '@/lib/api'
 import Loading from '@/components/reusables/loading'
@@ -20,6 +20,7 @@ function WorkspaceLayout({ children }: Props) {
 
     const { slug } = useParams()
     const { notify } = useContext(NotifyContext)
+    const pathname = usePathname()
     const [workspace, setWorkspace] = useState<WorkspaceTypes>({})
     const [loading, setLoading] = useState(true)
     const [user, setUser] = useState<User | null | undefined>(null)
@@ -48,7 +49,7 @@ function WorkspaceLayout({ children }: Props) {
                 />
                 <div className='flex-grow w-full'>
 
-                {children}
+                    {children}
                 </div>
             </div>
         </div>

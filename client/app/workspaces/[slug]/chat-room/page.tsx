@@ -16,11 +16,11 @@ function Page({ }: Props) {
             <div className='p-2 w-[70%] flex flex-col items-start justify-start h-full'>
                 <div className='w-full border-b p-1 flex items-center gap-3'>
                     <div className='p-2 rounded-full text-white font-bold grid place-content-center bg-blue-500 w-[40px] uppercase h-[40px]`'>
-                       av
+                        av
                     </div>
                     <h1 className='text-neutral-700 capitalize font-bold'>Avatar Name</h1>
                 </div>
-                <div className='w-full p-2 flex-grow'>
+                <div className='w-full p-2 flex-grow overflow-auto'>
                     chatting body area
                 </div>
                 <div className='w-full p-1 border-t'>
