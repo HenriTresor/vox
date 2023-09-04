@@ -13,7 +13,12 @@ import { useToast } from '@/components/ui/use-toast'
 import { NotifyContext } from '@/context/NotifyContext'
 import NewChannel from '@/components/modals/NewChannel'
 import { WorkspaceTypes } from '@/types/app'
+import Link from 'next/link'
 
+const sideItems = [
+    { name: 'Tasks', href: 'tasks' },
+    { name: 'Chat Room', href: 'chat' }
+]
 
 type Props = {}
 
@@ -37,20 +42,26 @@ function SideBar({ name, members, channels }: WorkspaceTypes) {
         <div
             className=' text-black  overflow-scroll w-1/5 h-full border-r p-2'
         >
-            <div className='flex border-b p-2 justify-between items-center '>
+            <div className='flex border-b-2 p-2 justify-between items-center '>
                 <Button onClick={() => openModal(<NewMemberModal />,
                     'Invite your team members',
                     'Input email address of your team member to send invite.')}
-                className='w-full flex justify-evenly font-bold items-center'
+                    className='w-full flex justify-evenly font-bold items-center'
                 ><PlusCircle /> Add people</Button>
             </div>
 
-            <div className='w-full h-full flex flex-col mt-5'>
+            <div className='w-full h-full mt-5'>
                 {/* <div className='w-full flex justify-between p-2 items-center'>
                     <h1>Channels</h1>
                 <Button onClick={() => openModal(<NewChannel />, 'Create new channel', 'fill in the information to create a new channel.')}><PlusCircle /></Button>
                 </div> */}
-
+                {
+                    sideItems?.map(item => (
+                        <Link href={item.href} key={item.href}
+                            className='w-full block font-bold p-2 hover:bg-blue-100 mb-2 rounded-md text-neutral-700'
+                        >{item.name}</Link>
+                    ))
+                }
 
             </div>
         </div>
