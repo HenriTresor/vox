@@ -1,13 +1,18 @@
 import { Button } from '@/components/ui/button'
+import { ChatContext } from '@/context/ChatProvider'
+import { Channel } from '@/types/app'
 import { PlusCircleIcon } from 'lucide-react'
 import React from 'react'
 
-type Props = { name: string }
+type Props = { channel: Channel }
 
-function Channel({ name }: Props) {
+function Channel({ channel }: Props) {
+    const { setCurrentChat } = React.useContext(ChatContext)
     return (
-        <div className='flex p-2 justify-between items-center cursor-pointer mb-2 hover:bg-neutral-100 font-bold'>
-            <h1># {name}</h1>
+        <div
+            onClick={() => setCurrentChat(channel)}
+            className='flex p-2 justify-between items-center cursor-pointer mb-2 hover:bg-neutral-100 font-bold'>
+            <h1># {channel.name}</h1>
         </div>
     )
 }

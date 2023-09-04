@@ -3,6 +3,7 @@ import Channel from '@/components/dashboard/views/Channel'
 import NewChannel from '@/components/modals/NewChannel'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { ChatContext } from '@/context/ChatProvider'
 import { DialogContext } from '@/context/DialogContext'
 import { NotifyContext } from '@/context/NotifyContext'
 import api from '@/lib/api'
@@ -18,6 +19,7 @@ function Page({ }: Props) {
     const { slug } = useParams()
     const { notify } = useContext(NotifyContext)
     const { setIsOpen, setDialogProps } = useContext(DialogContext)
+    const { currentChat } = useContext(ChatContext)
     const getChannels = async () => {
         try {
             const res = await api.server.POST('/channels/public', { slug })
@@ -62,7 +64,7 @@ function Page({ }: Props) {
 
                                 <div>
                                     {data?.channels?.map((channel: ChannelTypes) => (
-                                        <Channel {...channel} key={channel._id} />
+                                        <Channel channel={channel} key={channel._id} />
                                     ))}
                                 </div>
                             </div>
@@ -77,28 +79,47 @@ function Page({ }: Props) {
                     )
                 }
             </div>
-            <div className='p-2 w-[70%] flex flex-col items-start justify-start h-full'>
-                <div className='w-full border-b p-1 flex items-center gap-3'>
-                    <div className='p-2 rounded-full text-white font-bold grid place-content-center bg-blue-500 w-[40px] uppercase h-[40px]`'>
-                        av
+            {
+                currentChat ? (
+                    <div className='p-2 w-[70%] flex flex-col items-start justify-start h-full'>
+                        <div className='w-full border-b p-1 flex items-center gap-3'>
+                            <div className='p-2 rounded-full text-white font-bold grid place-content-center bg-blue-500 w-[40px] uppercase h-[40px]`'>
+                                {`${currentChat.name.charAt(0)}`}
+                            </div>
+                            <h1 className='text-neutral-700 capitalize font-bold'>{currentChat.name}</h1>
+                        </div>
+                        <div className='w-full p-2 flex-grow overflow-auto flex flex-col justify-start items-start'>
+                            {
+                                currentChat.messages.map(message => (
+                                    <div key={`${message.sendOn}`}>
+                                        <div className='w-full flex items-center gap-4'>
+                                            <div className='p-2 rounded-full text-white font-bold grid place-content-center bg-blue-500 w-[40px] uppercase h-[40px]`'>
+                                                {`${currentChat.creator.firstName.charAt(0)} ${currentChat.creator.lastName.charAt(0)}`}
+                                            </div>
+                                            <h1 className='capitalize font-bold'>{message.sender.firstName} {message.sender.lastName}</h1>
+                                        </div>
+                                    </div>
+                                ))
+                            }
+                        </div>
+                        <div className='w-full p-1 border-t'>
+                            <div className='border w-full rounded-md flex items-center p-2 gap-2'>
+                                <Input
+                                    placeholder='Write your message here'
+                                    className='w-full border-none'
+                                />
+                                <Button size={'icon'}>
+                                    <SendIcon />
+                                </Button>
+                            </div>
+                        </div>
                     </div>
-                    <h1 className='text-neutral-700 capitalize font-bold'>Avatar Name</h1>
-                </div>
-                <div className='w-full p-2 flex-grow overflow-auto'>
-                    chatting body area
-                </div>
-                <div className='w-full p-1 border-t'>
-                    <div className='border w-full rounded-md flex items-center p-2 gap-2'>
-                        <Input
-                            placeholder='Write your message here'
-                            className='w-full border-none'
-                        />
-                        <Button size={'icon'}>
-                            <SendIcon />
-                        </Button>
+                ) : (
+                    <div className='grid place-content-center text-black text-[1.3rem] font-bold w-full'>
+                        <h2>Select a chat to start!</h2>
                     </div>
-                </div>
-            </div>
+                )
+            }
         </div>
     )
 }
