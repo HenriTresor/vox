@@ -5,6 +5,9 @@ import crypto from 'crypto'
 import sendEmail from "../utils/emailTransporter.js";
 import { checkUserWithEmail, checkUserWithId } from "../utils/checkUser.js";
 import { channelValidObject } from "../validators/channels.joi.js";
+import ChannelModel from "../models/Channel.model.js";
+import { botId } from "./Channels.controller.js";
+
 
 const generateInviteLink = (name) => {
     const inviteCode = crypto.randomBytes(10).toString('hex')
@@ -23,16 +26,25 @@ export const createWorkspace = async (req, res, next) => {
         if (!creator) return next(errorResponse(404, 'creator was not found'))
         const slug = value.name + '-' + creator._id
         const { inviteLink, inviteCode } = generateInviteLink(slug)
+
+        const newChannel = await new ChannelModel({
+            name: 'General',
+            members: [admin],
+            form: 'public',
+            creator: admin,
+            messages: [{
+                sender: botId,
+                receiver: [...this.members],
+                message: 'Welcom to the General Channel of your workpace'
+            }]
+        }).save()
+
         let newWorkspace = new Workspace({
             slug,
             name: value.name,
             category: value.category,
             inviteLink,
-            channels: [{
-                name: 'General',
-                members: [admin],
-                creator: admin,
-            }],
+            channels: [newChannel._id],
             admin: value.admin,
             members: [admin],
             inviteCode: inviteCode

@@ -1,8 +1,33 @@
 import Channel from "../models/Channel.model.js";
+import WorkspaceModel from "../models/Workspace.model.js";
 import errorResponse from "../utils/errorResponse.js";
 import { channelValidObject } from "../validators/channels.joi.js";
 
 export const botId = '64f6041ae8eb4244b1f3d42d';
+
+
+export const getPublicChannels = async (req, res, next) => {
+    try {
+        const { slug } = req.body;
+
+        if (!slug) return next(errorResponse(400, 'workspace slug is required'));
+
+        let workspace = await WorkspaceModel.findOne({ slug }).populate('channels')
+
+        let channels = workspace.channels
+
+        if (!channels) throw new Error()
+
+        res.status(200).json({
+            status: true,
+            channels
+        })
+
+    } catch (error) {
+        console.log('[getting-public-channels]', error.message)
+        next(errorResponse(500, 'something went wrong'))
+    }
+}
 
 export const createChannel = async (req, res, next) => {
     try {
