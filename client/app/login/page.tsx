@@ -40,7 +40,7 @@ function Page({ params, searchParams }: Props) {
                 email,
                 password,
                 redirect: true,
-                callbackUrl: String(searchParams?.callbackUrl) || '/choose-workpspace',
+                callbackUrl: searchParams?.callBackUrl ? String(searchParams?.callBackUrl) : '/choose-workspace',
             })
         } catch (error: any) {
             notify({ message: error.message, type: 'error' })

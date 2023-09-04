@@ -26,10 +26,12 @@ export let authOptions: NextAuthOptions = {
         }
         return { ...data.user, apiToken: data.token };
       },
+      type: "credentials",
     }),
     GoogleProvider({
       clientId: `${process.env.GOOGLE_CLIENT_ID}`,
       clientSecret: `${process.env.GOOGLE_CLIENT_SECRET}`,
+
     }),
   ],
 
@@ -46,13 +48,6 @@ export let authOptions: NextAuthOptions = {
     async session({ session, token, user }) {
       session.user = token as any;
       return session;
-    },
-    async signIn({ profile, account }) {
-      console.log("profile", profile, "account", account);
-      if (account?.provider === "google") {
-        return true;
-      }
-      return false;
-    },
+    }
   },
 };

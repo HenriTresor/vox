@@ -45,11 +45,13 @@ function SideBar({ name, members, channels }: WorkspaceTypes) {
                 ><PlusCircle /> Add people</Button>
             </div>
 
-            <div >
-                <div className='w-full flex justify-between p-2 items-center'>
+            <div className='w-full h-full flex flex-col mt-5'>
+                {/* <div className='w-full flex justify-between p-2 items-center'>
                     <h1>Channels</h1>
                 <Button onClick={() => openModal(<NewChannel />, 'Create new channel', 'fill in the information to create a new channel.')}><PlusCircle /></Button>
-                </div>
+                </div> */}
+
+
             </div>
         </div>
     )
