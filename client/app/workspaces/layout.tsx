@@ -46,7 +46,10 @@ function WorkspaceLayout({ children }: Props) {
                 <SideBar
                     {...workspace}
                 />
+                <div className='flex-grow w-full'>
+
                 {children}
+                </div>
             </div>
         </div>
     )

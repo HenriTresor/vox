@@ -1,6 +1,6 @@
 'use client'
 import { Button } from '@/components/ui/button'
-import { Menu, PlusCircle, PlusCircleIcon } from 'lucide-react'
+import { Menu, MessageCircle, PlusCircle, PlusCircleIcon, WorkflowIcon } from 'lucide-react'
 import React, { useContext } from 'react'
 import Person from './Person'
 import Channel from './Channel'
@@ -8,7 +8,7 @@ import { DialogContext } from '@/context/DialogContext'
 import { Input } from '@/components/ui/input'
 import NewMemberModal from '@/components/modals/newMember'
 import api from '@/lib/api'
-import { useParams } from 'next/navigation'
+import { useParams, usePathname } from 'next/navigation'
 import { useToast } from '@/components/ui/use-toast'
 import { NotifyContext } from '@/context/NotifyContext'
 import NewChannel from '@/components/modals/NewChannel'
@@ -16,8 +16,8 @@ import { WorkspaceTypes } from '@/types/app'
 import Link from 'next/link'
 
 const sideItems = [
-    { name: 'Tasks', href: 'tasks' },
-    { name: 'Chat Room', href: 'chat' }
+    { name: 'Tasks', href: 'tasks', icon: <WorkflowIcon /> },
+    { name: 'Chat Room', href: `chat-room`, icon: <MessageCircle /> }
 ]
 
 type Props = {}
@@ -29,6 +29,7 @@ function SideBar({ name, members, channels }: WorkspaceTypes) {
     const { toast } = useToast()
     const { notify } = React.useContext(NotifyContext)
 
+    const pathname = usePathname()
 
     const openModal = (children: React.ReactNode, title: string, description: string) => {
         setIsOpen(true)
@@ -57,9 +58,9 @@ function SideBar({ name, members, channels }: WorkspaceTypes) {
                 </div> */}
                 {
                     sideItems?.map(item => (
-                        <Link href={item.href} key={item.href}
-                            className='w-full block font-bold p-2 hover:bg-blue-100 mb-2 rounded-md text-neutral-700'
-                        >{item.name}</Link>
+                        <Link href={`${pathname}/${item.href}`} key={item.href}
+                            className='flex w-full items-center gap-3 font-bold p-2 hover:bg-blue-100 mb-2 rounded-md text-neutral-700'
+                        > {item.icon} {item.name}</Link>
                     ))
                 }
 
