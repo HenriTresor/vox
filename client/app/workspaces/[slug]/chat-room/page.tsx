@@ -57,7 +57,7 @@ function Page({ }: Props) {
                             <div className='w-full h-auto'>
                                 <div className='flex p-2 justify-between items-center border-b'>
                                     <h1>Public channels</h1>
-                                        <Button onClick={() => openModal(<NewChannel />, 'Create new channel', 'fill in the information to create a new channel.')}><PlusCircle /></Button>
+                                    <Button onClick={() => openModal(<NewChannel slug={`${slug}`} />, 'Create new channel', 'fill in the information to create a new channel.')}><PlusCircle /></Button>
                                 </div>
 
                                 <div>

@@ -29,10 +29,12 @@ export const getPublicChannels = async (req, res, next) => {
 export const createChannel = async (req, res, next) => {
     try {
 
+        const { slug } = req.body
+        if (!slug) return next(errorResponse(400, 'workspace is required'))
         const { error, value } = channelValidObject.validate(req.body)
         if (error) return next(errorResponse(400, error.details[0].message))
 
-        const newChannel = await new Channel({
+        const newChannel = new Channel({
             name: value.name,
             members: [value.creator],
             form: value.form,
@@ -42,9 +44,14 @@ export const createChannel = async (req, res, next) => {
                 reciever: [value.creator],
                 message: 'welcome to your new channel!'
             }]
-        }).save()
+        })
 
-        if (!newChannel) throw new Error()
+        const updatedWorkspace = await WorkspaceModel.findOneAndUpdate({ slug }, {
+            $push: {
+                channels: newChannel._id
+            }
+        })
+        await newChannel.save()
 
         res.status(201).json(
             {

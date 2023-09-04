@@ -3,17 +3,35 @@ import { Input } from '../ui/input'
 import { Button } from '../ui/button'
 import { DialogContext } from '@/context/DialogContext'
 import { NotifyContext } from '@/context/NotifyContext'
+import api from '@/lib/api'
+import { getSession } from 'next-auth/react'
 
-type Props = {}
+type Props = {
+    slug: string;
+}
 
-function NewChannel({ }: Props) {
+function NewChannel({ slug }: Props) {
 
     const { setIsOpen } = useContext(DialogContext)
     const { notify } = useContext(NotifyContext)
     const [values, setValues] = useState({
         name: '',
-        form: ''
+        form: 'public'
     })
+
+    const createChannel = async () => {
+        try {
+            const session = await getSession()
+            const res = await api.server.POST('/channels', { ...values, creator: session?.user._id, slug })
+            const data = await res.json()
+            if (!data.status) throw new Error(data.message)
+
+            notify({ type: 'success', message: ' new channel added' })
+            setIsOpen(false)
+        } catch (error: any) {
+            notify({ type: 'error', message: error.message })
+        }
+    }
     return (
         <div className='w-full p-3 mt-3'>
             <Input
@@ -31,7 +49,7 @@ function NewChannel({ }: Props) {
                 <option value="private">private</option>
             </select>
 
-            <Button>Save</Button>
+            <Button onClick={createChannel}>Save</Button>
             <Button variant={'outline'} onClick={() => setIsOpen(false)}>Cancel</Button>
         </div>
     )
