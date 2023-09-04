@@ -1,7 +1,8 @@
+'use client'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { SendIcon } from 'lucide-react'
-import React from 'react'
+import { ChevronDown, SendIcon } from 'lucide-react'
+import React, { useState, useEffect } from 'react'
 
 type Props = {}
 
@@ -11,7 +12,23 @@ function Page({ }: Props) {
             className='p-3 flex h-full'
         >
             <div className='p-2 border-r w-[30%]'>
-                chat-contacts
+                <div className='w-full h-auto'>
+                    <div className='flex p-2 justify-between items-center border-b'>
+                        <h1>Public channels</h1>
+                        <ChevronDown />
+                    </div>
+
+                    <div>
+                        { }
+                    </div>
+                </div>
+                <div className='w-full h-auto'>
+
+                    <div className='flex p-2 justify-between items-center border-b'>
+                        <h1>Private channels</h1>
+                        <ChevronDown />
+                    </div>
+                </div>
             </div>
             <div className='p-2 w-[70%] flex flex-col items-start justify-start h-full'>
                 <div className='w-full border-b p-1 flex items-center gap-3'>
