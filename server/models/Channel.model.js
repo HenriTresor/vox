@@ -17,7 +17,7 @@ const ChannelSchema = new Schema({
         {
             type: String,
             sender: { type: Schema.Types.ObjectId, ref: 'users' },
-            receiver: { type: Schema.Types.ObjectId, ref: 'users' },
+            receiver: [{ type: Schema.Types.ObjectId, ref: 'users' }],
             message: { type: String },
             sendOn: { type: Date, default: Date.now() }
         }

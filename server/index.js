@@ -11,6 +11,7 @@ import http from 'http'
 import userRouter from './routes/user.route.js'
 import authRouter from './routes/auth.route.js'
 import workspaceRouter from './routes/workspace.route.js'
+import ChannelRouter from './routes/channels.route.js'
 
 
 config()
@@ -39,6 +40,7 @@ const root = '/api/v1/'
 app.use(`${root}users`, userRouter)
 app.use(`${root}auth`, authRouter)
 app.use(`${root}workspaces`, workspaceRouter)
+app.use(`${root}channels`, ChannelRouter)
 app.all('*', (req, res, next) => {
     next(errorResponse(404, 'route not found'))
 })
@@ -46,7 +48,7 @@ app.all('*', (req, res, next) => {
 
 app.use(errorHandler)
 
-const io = new Server(server, {
+export const io = new Server(server, {
     cors: {
         origin: '*',
         credentials: true
