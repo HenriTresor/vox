@@ -15,9 +15,6 @@ export const getPublicChannels = async (req, res, next) => {
         let workspace = await WorkspaceModel.findOne({ slug }).populate('channels')
 
         let channels = workspace.channels
-
-        if (!channels) throw new Error()
-
         res.status(200).json({
             status: true,
             channels

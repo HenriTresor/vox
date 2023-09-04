@@ -4,6 +4,6 @@ import { createChannel, getPublicChannels } from "../controllers/Channels.contro
 
 const router = Router()
 
-router.get('/channels/public', verifyToken, getPublicChannels)
+router.post('/public', verifyToken, getPublicChannels)
 router.post('/', verifyToken, createChannel)
 export default router

@@ -2,11 +2,10 @@ import './globals.css'
 import type { Metadata } from 'next'
 import NotifyContextProvider from '@/context/NotifyContext'
 import AuthContextProvider from '@/context/AuthContext'
-import { getSession } from 'next-auth/react'
 import { getServerSession } from 'next-auth'
 import DialogContextProvider from '@/context/DialogContext'
 import SocketProvider from '@/context/SocketProvider'
-import { QueryClient, QueryClientProvider} from 'react-query'
+import ReactQueryProvider from '@/context/QueryClientProvider'
 
 export const metadata: Metadata = {
   title: 'Vox - Team management and collaboration system',
@@ -14,7 +13,6 @@ export const metadata: Metadata = {
 }
 
 
-const client = new QueryClient()
 export default async function RootLayout({
   children,
 }: {
@@ -27,15 +25,15 @@ export default async function RootLayout({
     <html lang="en">
       <body>
         <NotifyContextProvider>
-          <QueryClientProvider client={client}>
-            <AuthContextProvider session={session}>
-              <SocketProvider>
-                <DialogContextProvider>
-                  {children}
-                </DialogContextProvider>
-              </SocketProvider>
-            </AuthContextProvider>
-        </QueryClientProvider>
+          <ReactQueryProvider>
+              <AuthContextProvider session={session}>
+                <SocketProvider>
+                  <DialogContextProvider>
+                    {children}
+                  </DialogContextProvider>
+                </SocketProvider>
+              </AuthContextProvider>
+          </ReactQueryProvider>
         </NotifyContextProvider>
       </body>
     </html>

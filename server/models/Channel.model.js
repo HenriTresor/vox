@@ -15,7 +15,6 @@ const ChannelSchema = new Schema({
     creator: { type: Schema.Types.ObjectId, required: true, trim: true },
     messages: [
         {
-            type: String,
             sender: { type: Schema.Types.ObjectId, ref: 'users' },
             receiver: [{ type: Schema.Types.ObjectId, ref: 'users' }],
             message: { type: String },

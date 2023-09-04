@@ -7,6 +7,7 @@ import { checkUserWithEmail, checkUserWithId } from "../utils/checkUser.js";
 import { channelValidObject } from "../validators/channels.joi.js";
 import ChannelModel from "../models/Channel.model.js";
 import { botId } from "./Channels.controller.js";
+import { ObjectId } from "mongoose";
 
 
 const generateInviteLink = (name) => {
@@ -34,7 +35,7 @@ export const createWorkspace = async (req, res, next) => {
             creator: admin,
             messages: [{
                 sender: botId,
-                receiver: [...this.members],
+                receiver: [admin],
                 message: 'Welcom to the General Channel of your workpace'
             }]
         }).save()

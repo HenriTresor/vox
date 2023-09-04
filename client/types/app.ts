@@ -9,6 +9,7 @@ export type Message = {
 export type Channel = {
   name: string;
   members: User[];
+  _id: string;
   creator: User;
   messages: Message[];
   form: "private" | "public";

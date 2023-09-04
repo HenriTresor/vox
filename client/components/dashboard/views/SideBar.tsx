@@ -35,14 +35,18 @@ function SideBar({ name, members, channels }: WorkspaceTypes) {
 
     const pathname = `/workspaces/${slug}`
 
-    const openModal = (children: React.ReactNode, title: string, description: string) => {
-        setIsOpen(true)
+ const openModal = (
+        children: React.ReactNode,
+        title: string,
+        description: string
+    ) => {
+        setIsOpen(true);
         setDialogProps({
             title: title,
             description,
             content: children,
-        })
-    }
+        });
+    };
     return (
         <div
             className=' text-black  overflow-scroll w-1/5 h-full border-r p-2'
@@ -56,10 +60,7 @@ function SideBar({ name, members, channels }: WorkspaceTypes) {
             </div>
 
             <div className='w-full h-full mt-5'>
-                {/* <div className='w-full flex justify-between p-2 items-center'>
-                    <h1>Channels</h1>
-                <Button onClick={() => openModal(<NewChannel />, 'Create new channel', 'fill in the information to create a new channel.')}><PlusCircle /></Button>
-                </div> */}
+              
                 {
                     sideItems?.map(item => (
                         <Link href={`${pathname}/${item.href}`} key={item.href}
