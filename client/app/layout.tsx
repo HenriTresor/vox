@@ -6,6 +6,7 @@ import { getServerSession } from 'next-auth'
 import DialogContextProvider from '@/context/DialogContext'
 import SocketProvider from '@/context/SocketProvider'
 import ReactQueryProvider from '@/context/QueryClientProvider'
+import ChatProvider from '@/context/ChatProvider'
 
 export const metadata: Metadata = {
   title: 'Vox - Team management and collaboration system',
@@ -26,13 +27,15 @@ export default async function RootLayout({
       <body>
         <NotifyContextProvider>
           <ReactQueryProvider>
-              <AuthContextProvider session={session}>
-                <SocketProvider>
+            <AuthContextProvider session={session}>
+              <SocketProvider>
+                <ChatProvider>
                   <DialogContextProvider>
                     {children}
                   </DialogContextProvider>
-                </SocketProvider>
-              </AuthContextProvider>
+                </ChatProvider>
+              </SocketProvider>
+            </AuthContextProvider>
           </ReactQueryProvider>
         </NotifyContextProvider>
       </body>
