@@ -88,15 +88,18 @@ function Page({ }: Props) {
                             </div>
                             <h1 className='text-neutral-700 capitalize font-bold'>{currentChat.name}</h1>
                         </div>
-                        <div className='w-full p-2 flex-grow overflow-auto flex flex-col justify-start items-start'>
+                        <div className='w-full flex-grow overflow-auto flex flex-col justify-start items-start'>
                             {
                                 currentChat.messages.map(message => (
-                                    <div key={`${message.sendOn}`}>
-                                        <div className='w-full flex items-center gap-4'>
-                                            <div className='p-2 rounded-full text-white font-bold grid place-content-center bg-blue-500 w-[40px] uppercase h-[40px]`'>
-                                                {`${currentChat.creator.firstName.charAt(0)} ${currentChat.creator.lastName.charAt(0)}`}
+                                    <div key={`${message.sendOn}`} className='w-full flex gap-4 flex-col items-start border-b-2 p-2'>
+                                        <div className='flex w-full gap-2'>
+                                            <div className='p-2 rounded-full text-white font-bold flex items-center justify-center w-[50px] h-[50px] bg-blue-500 uppercase'>
+                                                {`${message.sender.firstName.charAt(0)}${message.sender.lastName.charAt(0)}`}
                                             </div>
-                                            <h1 className='capitalize font-bold'>{message.sender.firstName} {message.sender.lastName}</h1>
+                                            <h1 className='capitalize font-bold flex-col '>{message.sender.firstName} {message.sender.lastName} <span className='font-thin font-mono block'>{new Date(message.sendOn).toLocaleDateString()}</span></h1>
+                                        </div>
+                                        <div className='w-full ml-9'>
+                                            <p className='ml-5'>{message.message}</p>
                                         </div>
                                     </div>
                                 ))
