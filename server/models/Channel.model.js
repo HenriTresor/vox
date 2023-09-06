@@ -2,6 +2,7 @@ import { Schema, model } from 'mongoose'
 
 const ChannelSchema = new Schema({
     name: { type: String, required: true, trim: true },
+    motherWorkspace: { type: Schema.Types.ObjectId, ref: 'workspaces', required: true },
     members: [{
         type: Schema.Types.ObjectId,
         ref: 'users'

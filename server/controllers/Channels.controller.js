@@ -14,7 +14,7 @@ export const getPublicChannels = async (req, res, next) => {
 
         let workspace = await WorkspaceModel.findOne({ slug })
             .populate('channels')
-            
+
 
         let channels = workspace.channels
         res.status(200).json({
@@ -36,8 +36,11 @@ export const createChannel = async (req, res, next) => {
         const { error, value } = channelValidObject.validate(req.body)
         if (error) return next(errorResponse(400, error.details[0].message))
 
+        const workspace = await WorkspaceModel.findOne({ slug })
+        if (!workspace) return next(errorResponse(400, 'workspace not found'))
         const newChannel = new Channel({
             name: value.name,
+            motherWorkspace: workspace._id,
             members: [value.creator],
             form: value.form,
             creator: value.creator,
