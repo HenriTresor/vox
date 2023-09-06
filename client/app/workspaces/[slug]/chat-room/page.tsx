@@ -7,7 +7,7 @@ import { ChatContext } from '@/context/ChatProvider'
 import { DialogContext } from '@/context/DialogContext'
 import { NotifyContext } from '@/context/NotifyContext'
 import api from '@/lib/api'
-import { Channel as ChannelTypes } from '@/types/app'
+import { Channel as ChannelTypes, Message } from '@/types/app'
 import { ChevronDown, PlusCircle, SendIcon } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import React, { useState, useEffect, useContext } from 'react'
@@ -19,11 +19,12 @@ function Page({ }: Props) {
     const { slug } = useParams()
     const { notify } = useContext(NotifyContext)
     const { setIsOpen, setDialogProps } = useContext(DialogContext)
-    const { currentChat } = useContext(ChatContext)
+    const { currentChat, setMessages, messages } = useContext(ChatContext)
     const getChannels = async () => {
         try {
             const res = await api.server.POST('/channels/public', { slug })
-            return res.json()
+            const data = await res.json()
+            return data
         } catch (error: any) {
             throw new Error(error.message)
         }
@@ -90,7 +91,7 @@ function Page({ }: Props) {
                         </div>
                         <div className='w-full flex-grow overflow-auto flex flex-col justify-start items-start'>
                             {
-                                currentChat.messages.map(message => (
+                                messages && messages.map((message: Message) => (
                                     <div key={`${message.sendOn}`} className='w-full flex gap-4 flex-col items-start border-b-2 p-2'>
                                         <div className='flex w-full gap-2'>
                                             <div className='p-2 rounded-full text-white font-bold flex items-center justify-center w-[50px] h-[50px] bg-blue-500 uppercase'>
