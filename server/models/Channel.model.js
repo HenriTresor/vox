@@ -13,7 +13,7 @@ const ChannelSchema = new Schema({
         enum: ['private', 'public'],
         default: 'public'
     },
-    creator: { type: Schema.Types.ObjectId, required: true, trim: true },
+    creator: { type: Schema.Types.ObjectId, ref: 'users', required: true, trim: true },
     messages: [
         {
             sender: { type: Schema.Types.ObjectId, ref: 'users' },

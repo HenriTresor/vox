@@ -28,8 +28,9 @@ export const createWorkspace = async (req, res, next) => {
         const slug = value.name + '-' + creator._id
         const { inviteLink, inviteCode } = generateInviteLink(slug)
 
-        const newChannel = await new ChannelModel({
+        const newChannel = new ChannelModel({
             name: 'General',
+            motherWorkspace: '',
             members: [admin],
             form: 'public',
             creator: admin,
@@ -38,7 +39,7 @@ export const createWorkspace = async (req, res, next) => {
                 receiver: [admin],
                 message: 'Welcom to the General Channel of your workpace'
             }]
-        }).save()
+        })
 
         let newWorkspace = new Workspace({
             slug,
@@ -48,10 +49,12 @@ export const createWorkspace = async (req, res, next) => {
             channels: [newChannel._id],
             admin: value.admin,
             members: [admin],
-            inviteCode: inviteCode
+            inviteCode: inviteCode,
         })
 
+        newChannel.motherWorkspace = newWorkspace._id
         await newWorkspace.save()
+        await newChannel.save()
         const emailRes = await sendEmail(creator.email, 'add more people to your tem', `Send this link to your group members so they can join, ${inviteLink}`)
         if (emailRes === true) {
             return res.status(201).json({
