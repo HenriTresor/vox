@@ -13,10 +13,12 @@ export const getPublicChannels = async (req, res, next) => {
         if (!slug) return next(errorResponse(400, 'workspace slug is required'));
 
         let workspace = await WorkspaceModel.findOne({ slug })
-            .populate('channels')
-
-
-        let channels = workspace.channels
+        if (!workspace) return next(errorResponse(400, 'workspace not found'));
+        let channels = await Channel.find({ motherWorkspace: workspace._id })
+            .populate('creator')
+            .populate('members')
+            .populate('messages.sender')
+            .populate('messages.receiver')
         res.status(200).json({
             status: true,
             channels
