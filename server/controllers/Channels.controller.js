@@ -72,3 +72,27 @@ export const createChannel = async (req, res, next) => {
         next(errorResponse(500, 'something went wrong'))
     }
 }
+
+export const addMessage = async (req, res, next) => {
+    try {
+        const { message, channelId, sender } = req.body
+        if (!message || !channelId) return next(errorResponse(400, 'message is required'))
+
+        let channel = await Channel.findById(channelId)
+        if (!channel) return next(errorResponse(404, ' Channel not found'))
+
+        await Channel.findOneAndUpdate(channelId, {
+            $push: {
+                messages: { sender, receiver: [...channel.members], message }
+            }
+        })
+
+        return res.status(201).json({
+            status: true,
+            message: 'message added successfully'
+        })
+    } catch (error) {
+        console.log('[adding-message]', error.message)
+        next(errorResponse(500, 'something went wrong'))
+    }
+} 
