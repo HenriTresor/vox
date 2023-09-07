@@ -6,5 +6,5 @@ const router = Router()
 
 router.post('/public', verifyToken, getPublicChannels)
 router.post('/', verifyToken, createChannel)
-router.post('/messages/add', verifyToken, addMessage)
+// router.post('/messages/add', verifyToken, addMessage)
 export default router
