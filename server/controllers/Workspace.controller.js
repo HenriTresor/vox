@@ -34,11 +34,11 @@ export const createWorkspace = async (req, res, next) => {
             members: [admin],
             form: 'public',
             creator: admin,
-            messages: [{
-                sender: botId,
-                receiver: [admin],
-                message: 'Welcom to the General Channel of your workpace'
-            }]
+            // messages: [{
+            //     sender: botId,
+            //     receiver: [admin],
+            //     message: 'Welcom to the General Channel of your workpace'
+            // }]
         })
 
         let newWorkspace = new Workspace({
@@ -55,6 +55,14 @@ export const createWorkspace = async (req, res, next) => {
         newChannel.motherWorkspace = newWorkspace._id
         await newWorkspace.save()
         await newChannel.save()
+        await new MessageModel({
+            sender: botId,
+            receivers: newChannel.members,
+            motherChannel: newChannel._id,
+            message: {
+                text: 'Welcome to your new channel',
+            }
+        }).save()
         const emailRes = await sendEmail(creator.email, 'add more people to your tem', `Send this link to your group members so they can join, ${inviteLink}`)
         if (emailRes === true) {
             return res.status(201).json({
