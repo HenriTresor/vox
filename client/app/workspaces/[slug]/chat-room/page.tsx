@@ -9,6 +9,7 @@ import { NotifyContext } from '@/context/NotifyContext'
 import api from '@/lib/api'
 import { Channel as ChannelTypes, Message } from '@/types/app'
 import { ChevronDown, PlusCircle, SendIcon } from 'lucide-react'
+import { getSession } from 'next-auth/react'
 import { useParams } from 'next/navigation'
 import React, { useState, useEffect, useContext } from 'react'
 import { useQuery } from 'react-query'
@@ -19,7 +20,8 @@ function Page({ }: Props) {
     const { slug } = useParams()
     const { notify } = useContext(NotifyContext)
     const { setIsOpen, setDialogProps } = useContext(DialogContext)
-    const { currentChat, setMessages, messages } = useContext(ChatContext)
+    const { currentChat, setMessages, messages, setCurrentChat } = useContext(ChatContext)
+    const [message, setMessage] = useState('')
     const getChannels = async () => {
         try {
             const res = await api.server.POST('/channels/public', { slug })
@@ -32,8 +34,7 @@ function Page({ }: Props) {
 
     const { isError, isLoading, data, refetch } = useQuery('channels', () => getChannels())
     useEffect(() => {
-        data && !data?.status && notify({ message: data?.message, type: 'error' })
-        console.log('data', data)
+        data && !data?.status && notify({ message: data?.message, type: 'error' }) 
     }, [data?.status])
 
 
@@ -49,6 +50,25 @@ function Page({ }: Props) {
             content: children,
         });
     };
+
+    const addMessage = async () => {
+        try {
+            const sessionData = await getSession()
+            const res = await api.server.POST(`/channels/messages/add`, {
+                message,
+                channelId: currentChat?._id,
+                sender: sessionData?.user._id
+            })
+            const data = await res.json();
+            console.log(data)
+            if (!data.status) throw Error(data.error)
+            setMessages((prev: Message[]) => {
+                return [...prev, { sender: sessionData?.user, message, sendOn: Date.now() }]
+            })
+        } catch (error: any) {
+            notify({ message: error.message, type: 'error' })
+        }
+    }
     return (
         <div
             className='p-3 flex h-full'
@@ -109,10 +129,14 @@ function Page({ }: Props) {
                         <div className='w-full p-1 border-t'>
                             <div className='border w-full rounded-md flex items-center p-2 gap-2'>
                                 <Input
+                                    name='message'
+                                    onChange={(e) => setMessage(e.target.value)}
                                     placeholder='Write your message here'
                                     className='w-full border-none'
                                 />
-                                <Button size={'icon'}>
+                                <Button size={'icon'}
+                                    onClick={addMessage}
+                                >
                                     <SendIcon />
                                 </Button>
                             </div>

@@ -1,23 +1,28 @@
+'use client'
 import { Button } from '@/components/ui/button'
 import { ChatContext } from '@/context/ChatProvider'
-import { Channel } from '@/types/app'
+import { Channel, Message } from '@/types/app'
 import { PlusCircleIcon } from 'lucide-react'
 import React from 'react'
+import _ from 'lodash'
 
 type Props = { channel: Channel }
 
-function Channel({ channel }: Props) {
-    const { setCurrentChat, setMessages } = React.useContext(ChatContext)
+function ChannelComponent({ channel }: Props) {
+
+    const { setCurrentChat, setMessages, messages } = React.useContext(ChatContext)
+    const handleChannelChange = () => {
+        setCurrentChat(channel)
+    }
     return (
         <div
             onClick={() => {
-                setCurrentChat(channel)
-                setMessages(channel.messages)
+                handleChannelChange()
             }}
             className='flex p-2 justify-between items-center cursor-pointer mb-2 hover:bg-neutral-100 font-bold'>
-            <h1># {channel.name}</h1>
+            <h1># {channel?.name}</h1>
         </div>
     )
 }
 
-export default Channel
+export default ChannelComponent

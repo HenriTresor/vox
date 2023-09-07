@@ -76,12 +76,13 @@ export const createChannel = async (req, res, next) => {
 export const addMessage = async (req, res, next) => {
     try {
         const { message, channelId, sender } = req.body
-        if (!message || !channelId) return next(errorResponse(400, 'message is required'))
+        console.log(req.body)
+        if (!message || !channelId || !sender) return next(errorResponse(400, 'message is required'))
 
         let channel = await Channel.findById(channelId)
         if (!channel) return next(errorResponse(404, ' Channel not found'))
 
-        await Channel.findOneAndUpdate(channelId, {
+        await Channel.findOneAndUpdate({ _id: channelId }, {
             $push: {
                 messages: { sender, receiver: [...channel.members], message }
             }
