@@ -1,5 +1,6 @@
 import Channel from "../models/Channel.model.js"
 import Message from "../models/Message.model.js"
+import errorResponse from "../utils/errorResponse.js"
 
 export const addMessage = async (req, res, next) => {
     try {
@@ -28,4 +29,27 @@ export const addMessage = async (req, res, next) => {
         console.log('[adding-message]', error.message)
         next(errorResponse(500, 'something went wrong'))
     }
-} 
+}
+
+export const getMessages = async (req, res, next) => {
+    try {
+        const { users } = req.body
+
+        if (!users?.length) return next(errorResponse(400, 'users are required'))
+
+        const messages = await Message.find({
+            $or: [
+                { sender: users },
+                { receivers: users }
+            ]
+        })
+
+        res.status(200).json({
+            status: true,
+            messages
+        })
+    } catch (error) {
+        console.log('[getting-messages]', error.message)
+        next(errorResponse(500, 'something went wrong'))
+    }
+}

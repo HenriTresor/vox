@@ -1,6 +1,6 @@
 import { Router } from "express";
 import verifyToken from "../middlewares/verifyToken.js";
-import { addMessage, createChannel, getPublicChannels } from "../controllers/Channels.controller.js";
+import {  createChannel, getPublicChannels } from "../controllers/Channels.controller.js";
 
 const router = Router()
 

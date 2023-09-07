@@ -3,17 +3,33 @@ import { Button } from '@/components/ui/button'
 import { ChatContext } from '@/context/ChatProvider'
 import { Channel, Message } from '@/types/app'
 import { PlusCircleIcon } from 'lucide-react'
-import React from 'react'
+import React, { useCallback, useEffect } from 'react'
 import _ from 'lodash'
+import { useQuery } from 'react-query'
+import api from '@/lib/api'
 
 type Props = { channel: Channel }
 
 function ChannelComponent({ channel }: Props) {
 
     const { setCurrentChat, setMessages, messages } = React.useContext(ChatContext)
+
+    const getMessages = useCallback(async () => {
+        const res = await api.server.POST('/messages', { users: channel.members })
+        const data = await res.json()
+        console.log('messages', data)
+
+        return data
+    }, [channel.members])
+    const { isLoading, data, status } = useQuery('messages', getMessages)
+    useEffect(() => {
+        status === 'success' && setMessages(data?.messages)
+    }, [status])
+
     const handleChannelChange = () => {
         setCurrentChat(channel)
     }
+
     return (
         <div
             onClick={() => {

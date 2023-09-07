@@ -12,7 +12,7 @@ import userRouter from './routes/user.route.js'
 import authRouter from './routes/auth.route.js'
 import workspaceRouter from './routes/workspace.route.js'
 import ChannelRouter from './routes/channels.route.js'
-
+import MessageRouter from './routes/Message.router.js'
 
 config()
 
@@ -41,6 +41,7 @@ app.use(`${root}users`, userRouter)
 app.use(`${root}auth`, authRouter)
 app.use(`${root}workspaces`, workspaceRouter)
 app.use(`${root}channels`, ChannelRouter)
+app.use(`${root}/messages`, MessageRouter)
 app.all('*', (req, res, next) => {
     next(errorResponse(404, 'route not found'))
 })

@@ -34,7 +34,7 @@ function Page({ }: Props) {
 
     const { isError, isLoading, data, refetch } = useQuery('channels', () => getChannels())
     useEffect(() => {
-        data && !data?.status && notify({ message: data?.message, type: 'error' }) 
+        data && !data?.status && notify({ message: data?.message, type: 'error' })
     }, [data?.status])
 
 
