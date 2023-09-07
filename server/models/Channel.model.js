@@ -14,14 +14,14 @@ const ChannelSchema = new Schema({
         default: 'public'
     },
     creator: { type: Schema.Types.ObjectId, ref: 'users', required: true, trim: true },
-    messages: [
-        {
-            sender: { type: Schema.Types.ObjectId, ref: 'users' },
-            receiver: [{ type: Schema.Types.ObjectId, ref: 'users' }],
-            message: { type: String },
-            sendOn: { type: Date, default: Date.now() }
-        }
-    ]
+    // messages: [
+    //     {
+    //         sender: { type: Schema.Types.ObjectId, ref: 'users' },
+    //         receiver: [{ type: Schema.Types.ObjectId, ref: 'users' }],
+    //         message: { type: String },
+    //         sendOn: { type: Date, default: Date.now() }
+    //     }
+    // ]
 },
     {
         timestamps: true,
