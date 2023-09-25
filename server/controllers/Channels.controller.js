@@ -18,8 +18,6 @@ export const getPublicChannels = async (req, res, next) => {
         let channels = await Channel.find({ motherWorkspace: workspace._id })
             .populate('creator')
             .populate('members')
-            .populate('messages.sender')
-            .populate('messages.receiver')
         res.status(200).json({
             status: true,
             channels

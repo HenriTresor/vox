@@ -12,20 +12,24 @@ type Props = { channel: Channel }
 
 function ChannelComponent({ channel }: Props) {
 
-    const { setCurrentChat, setMessages, messages } = React.useContext(ChatContext)
+    const { setCurrentChat, setMessages, messages, currentChat } = React.useContext(ChatContext)
 
     const getMessages = useCallback(async () => {
-        const res = await api.server.POST('/messages', { users: channel.members })
+        const res = await api.server.POST('/messages', { users: channel.members, currentChannel: currentChat?._id })
         const data = await res.json()
-        console.log('messages', data)
+        if (!data.status) throw new Error(data.message)
+        setMessages(data?.messages)
+    }, [currentChat?._id])
 
-        return data
-    }, [channel.members])
-    const { isLoading, data, status } = useQuery('messages', getMessages)
+    // const { isLoading, data, status, refetch } = useQuery('messages', getMessages)
+    // useEffect(() => {
+    //     refetch()
+    // }, [currentChat?._id])
+
     useEffect(() => {
-        status === 'success' && setMessages(data?.messages)
-    }, [status])
-
+        getMessages()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [currentChat?._id])
     const handleChannelChange = () => {
         setCurrentChat(channel)
     }

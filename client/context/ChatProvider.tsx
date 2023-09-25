@@ -9,7 +9,7 @@ type Props = {
 type DefaultTypes = {
     currentChat: Channel | null;
     setCurrentChat: (vl: any) => void;
-    messages: Message[] | any;
+    messages: Message[];
     setMessages: (vl: any) => void;
 }
 
@@ -24,7 +24,7 @@ const defaultValues = {
 export const ChatContext = React.createContext<DefaultTypes>(defaultValues)
 function ChatProvider({ children }: Props) {
     const [currentChat, setCurrentChat] = React.useState<Channel | null>(null)
-    const [messages,setMessages] = React.useState<Message[]| null>(null)
+    const [messages,setMessages] = React.useState<Message[]>([])
 
     const value: DefaultTypes = {
         currentChat,

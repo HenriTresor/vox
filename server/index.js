@@ -41,7 +41,7 @@ app.use(`${root}users`, userRouter)
 app.use(`${root}auth`, authRouter)
 app.use(`${root}workspaces`, workspaceRouter)
 app.use(`${root}channels`, ChannelRouter)
-app.use(`${root}/messages`, MessageRouter)
+app.use(`${root}messages`, MessageRouter)
 app.all('*', (req, res, next) => {
     next(errorResponse(404, 'route not found'))
 })

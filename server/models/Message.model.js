@@ -13,7 +13,12 @@ const MessageSchema = new Schema(
     {
         timestamps: true,
     }
+
 )
+
+MessageSchema.pre('save', function () {
+    this.receivers.push(this.sender)
+})
 
 export default model('messages', MessageSchema)
 

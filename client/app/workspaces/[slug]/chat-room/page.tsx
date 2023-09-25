@@ -54,16 +54,17 @@ function Page({ }: Props) {
     const addMessage = async () => {
         try {
             const sessionData = await getSession()
-            const res = await api.server.POST(`/channels/messages/add`, {
-                message,
+            const res = await api.server.POST(`/messages/add`, {
+                message: { text: message },
                 channelId: currentChat?._id,
-                sender: sessionData?.user._id
+                sender: sessionData?.user._id,
+                receivers: currentChat?.members
             })
             const data = await res.json();
             console.log(data)
             if (!data.status) throw Error(data.error)
             setMessages((prev: Message[]) => {
-                return [...prev, { sender: sessionData?.user, message, sendOn: Date.now() }]
+                return [...prev, { sender: sessionData?.user, message: { text: message, image: '' }, createdAt: Date.now() }]
             })
         } catch (error: any) {
             notify({ message: error.message, type: 'error' })
@@ -111,19 +112,22 @@ function Page({ }: Props) {
                         </div>
                         <div className='w-full flex-grow overflow-auto flex flex-col justify-start items-start'>
                             {
-                                messages && messages.map((message: Message) => (
-                                    <div key={`${message.sendOn}`} className='w-full flex gap-4 flex-col items-start border-b-2 p-2'>
-                                        <div className='flex w-full gap-2'>
-                                            <div className='p-2 rounded-full text-white font-bold flex items-center justify-center w-[50px] h-[50px] bg-blue-500 uppercase'>
-                                                {`${message.sender.firstName.charAt(0)}${message.sender.lastName.charAt(0)}`}
+                                messages && messages?.map((message: Message) => {
+                                    console.log(message)
+                                    return (
+                                        <div key={`${message.createdAt}`} className='w-full flex gap-4 flex-col items-start border-b-2 p-2'>
+                                            <div className='flex w-full gap-2'>
+                                                <div className='p-2 rounded-full text-white font-bold flex items-center justify-center w-[50px] h-[50px] bg-blue-500 uppercase'>
+                                                    {`${message.sender.firstName.charAt(0)}${message.sender.lastName.charAt(0)}`}
+                                                </div>
+                                                <h1 className='capitalize font-bold flex-col '>{message.sender.firstName} {message.sender.lastName} <span className='font-thin font-mono block'>{new Date(message.createdAt).toLocaleDateString()}</span></h1>
                                             </div>
-                                            <h1 className='capitalize font-bold flex-col '>{message.sender.firstName} {message.sender.lastName} <span className='font-thin font-mono block'>{new Date(message.sendOn).toLocaleDateString()}</span></h1>
+                                            <div className='w-full ml-9'>
+                                                <p className='ml-5'>{message.message.text}</p>
+                                            </div>
                                         </div>
-                                        <div className='w-full ml-9'>
-                                            <p className='ml-5'>{message.message}</p>
-                                        </div>
-                                    </div>
-                                ))
+                                    )
+                                })
                             }
                         </div>
                         <div className='w-full p-1 border-t'>

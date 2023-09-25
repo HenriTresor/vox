@@ -3,8 +3,11 @@ import { User } from "./next-auth";
 export type Message = {
   sender: User;
   receiver: User;
-  message: string;
-  sendOn: Date;
+  message: {
+    text: string;
+    image?: string;
+  };
+  createdAt: Date;
 };
 export type Channel = {
   name: string;

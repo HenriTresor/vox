@@ -1,6 +1,7 @@
 import Channel from "../models/Channel.model.js"
 import Message from "../models/Message.model.js"
 import errorResponse from "../utils/errorResponse.js"
+import mongoose from "mongoose"
 
 export const addMessage = async (req, res, next) => {
     try {
@@ -16,9 +17,7 @@ export const addMessage = async (req, res, next) => {
                 sender,
                 receivers,
                 motherChannel: channelId,
-                message: {
-                    text: message?.text,
-                }
+                message
             }
         ).save()
         return res.status(201).json({
@@ -33,16 +32,18 @@ export const addMessage = async (req, res, next) => {
 
 export const getMessages = async (req, res, next) => {
     try {
-        const { users } = req.body
-
+        const { users, currentChannel } = req.body
         if (!users?.length) return next(errorResponse(400, 'users are required'))
 
+        const newId = new mongoose.Types.ObjectId(currentChannel)
         const messages = await Message.find({
-            $or: [
-                { sender: users },
-                { receivers: users }
+            $and: [
+
+                { receivers: { $all: users } },
+                { motherChannel: newId }
             ]
-        })
+
+        }).populate('sender').populate('receivers').sort({ createdAt: 1 })
 
         res.status(200).json({
             status: true,
