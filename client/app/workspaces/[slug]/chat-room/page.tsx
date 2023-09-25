@@ -11,12 +11,14 @@ import { Channel as ChannelTypes, Message } from '@/types/app'
 import { ChevronDown, PlusCircle, SendIcon } from 'lucide-react'
 import { getSession } from 'next-auth/react'
 import { useParams } from 'next/navigation'
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect, useContext, useRef, ChangeEvent } from 'react'
 import { useQuery } from 'react-query'
+import moment from 'moment'
 
 type Props = {}
 
 function Page({ }: Props) {
+    const inputRef = useRef<ChangeEvent<HTMLInputElement> | any>(null)
     const { slug } = useParams()
     const { notify } = useContext(NotifyContext)
     const { setIsOpen, setDialogProps } = useContext(DialogContext)
@@ -61,15 +63,33 @@ function Page({ }: Props) {
                 receivers: currentChat?.members
             })
             const data = await res.json();
-            console.log(data)
-            if (!data.status) throw Error(data.error)
+            if (!data.status) return notify({ message: data.message, type: 'error' })
             setMessages((prev: Message[]) => {
                 return [...prev, { sender: sessionData?.user, message: { text: message, image: '' }, createdAt: Date.now() }]
             })
+            setMessage('')
+            inputRef.current.focus()
         } catch (error: any) {
+            console.log(error)
             notify({ message: error.message, type: 'error' })
         }
     }
+
+    useEffect(() => {
+        function sendOnEnter(e: KeyboardEvent) {
+            try {
+                if (e.key === 'Enter' && message !== '') {
+                    return addMessage()
+                }
+                notify({ message: 'enter a message', type: 'info' })
+            } catch (error: any) {
+                console.log('error sending message', error.message)
+            }
+        }
+
+        window.addEventListener('keydown', e => sendOnEnter(e))
+        return () => window.removeEventListener('keydown', e => sendOnEnter(e))
+    }, [])
     return (
         <div
             className='p-3 flex h-full'
@@ -120,7 +140,7 @@ function Page({ }: Props) {
                                                 <div className='p-2 rounded-full text-white font-bold flex items-center justify-center w-[50px] h-[50px] bg-blue-500 uppercase'>
                                                     {`${message.sender.firstName.charAt(0)}${message.sender.lastName.charAt(0)}`}
                                                 </div>
-                                                <h1 className='capitalize font-bold flex-col '>{message.sender.firstName} {message.sender.lastName} <span className='font-thin font-mono block'>{new Date(message.createdAt).toLocaleDateString()}</span></h1>
+                                                <h1 className='capitalize font-bold flex-col '>{message.sender.firstName} {message.sender.lastName} <span className='font-mono block font-thin text-[13px] mt-2'>{moment(Date.now()).to(message.createdAt)}</span></h1>
                                             </div>
                                             <div className='w-full ml-9'>
                                                 <p className='ml-5'>{message.message.text}</p>
@@ -134,7 +154,9 @@ function Page({ }: Props) {
                             <div className='border w-full rounded-md flex items-center p-2 gap-2'>
                                 <Input
                                     name='message'
+                                    ref={inputRef}
                                     onChange={(e) => setMessage(e.target.value)}
+                                    value={message}
                                     placeholder='Write your message here'
                                     className='w-full border-none'
                                 />
