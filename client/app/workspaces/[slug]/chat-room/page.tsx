@@ -55,20 +55,22 @@ function Page({ }: Props) {
 
     const addMessage = async () => {
         try {
-            const sessionData = await getSession()
-            const res = await api.server.POST(`/messages/add`, {
-                message: { text: message },
-                channelId: currentChat?._id,
-                sender: sessionData?.user._id,
-                receivers: currentChat?.members
-            })
-            const data = await res.json();
-            if (!data.status) return notify({ message: data.message, type: 'error' })
-            setMessages((prev: Message[]) => {
-                return [...prev, { sender: sessionData?.user, message: { text: message, image: '' }, createdAt: Date.now() }]
-            })
-            setMessage('')
-            inputRef.current.focus()
+            if (currentChat) {
+                const sessionData = await getSession()
+                const res = await api.server.POST(`/messages/add`, {
+                    message: { text: inputRef.current?.value },
+                    channelId: currentChat?._id,
+                    sender: sessionData?.user._id,
+                    receivers: currentChat?.members
+                })
+                const data = await res.json();
+                if (!data.status) return notify({ message: data.message, type: 'error' })
+                setMessages((prev: Message[]) => {
+                    return [...prev, { sender: sessionData?.user, message: { text: message, image: '' }, createdAt: Date.now() }]
+                })
+                setMessage('')
+                inputRef.current.focus()
+            }
         } catch (error: any) {
             console.log(error)
             notify({ message: error.message, type: 'error' })
@@ -78,10 +80,9 @@ function Page({ }: Props) {
     useEffect(() => {
         function sendOnEnter(e: KeyboardEvent) {
             try {
-                if (e.key === 'Enter' && message !== '') {
-                    return addMessage()
+                if (e.key === 'Enter') {
+                    addMessage()
                 }
-                notify({ message: 'enter a message', type: 'info' })
             } catch (error: any) {
                 console.log('error sending message', error.message)
             }
@@ -122,7 +123,7 @@ function Page({ }: Props) {
                 }
             </div>
             {
-                currentChat ? (
+                currentChat !== null ? (
                     <div className='p-2 w-[70%] flex flex-col items-start justify-start h-full'>
                         <div className='w-full border-b p-1 flex items-center gap-3'>
                             <div className='p-2 rounded-full text-white font-bold grid place-content-center bg-blue-500 w-[40px] uppercase h-[40px]`'>

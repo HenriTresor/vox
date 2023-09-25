@@ -6,6 +6,7 @@ import mongoose from "mongoose"
 export const addMessage = async (req, res, next) => {
     try {
         const { message, channelId, sender, receivers } = req.body
+        console.log(req.body)
         if (!message || !channelId || !sender) return next(errorResponse(400, 'message is required'))
 
         let channel = await Channel.findById(channelId)

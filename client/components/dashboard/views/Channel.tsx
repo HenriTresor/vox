@@ -34,6 +34,9 @@ function ChannelComponent({ channel }: Props) {
         setCurrentChat(channel)
     }
 
+    useEffect(() => {
+        console.log('current chat', currentChat)
+    }, [currentChat])
     return (
         <div
             onClick={() => {
